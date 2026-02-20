@@ -2,76 +2,87 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TerriTory</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<title>TerriTory — Claim the World</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=JetBrains+Mono:wght@400;700&family=Outfit:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;overflow:hidden;font-family:'Outfit',sans-serif;background:#060810;color:#e2e8f5}
+:root{
+  --bg:#060810;--surface:#0d1017;--surface2:#131720;
+  --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.12);
+  --blue:#38bdf8;--purple:#818cf8;--green:#4ade80;--orange:#fb923c;
+  --pink:#f472b6;--yellow:#fbbf24;--red:#f87171;--teal:#34d399;
+}
 
 /* ── LOADING ─── */
-#loading{position:fixed;inset:0;background:#060810;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px}
-.spin{width:36px;height:36px;border:3px solid rgba(56,189,248,0.15);border-top-color:#38bdf8;border-radius:50%;animation:spin .8s linear infinite}
+#loading{position:fixed;inset:0;background:var(--bg);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px}
+.spin{width:44px;height:44px;border:3px solid rgba(56,189,248,0.1);border-top-color:#38bdf8;border-radius:50%;animation:spin .7s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
-.loadtxt{font-family:'JetBrains Mono',monospace;font-size:12px;color:#4a5568;letter-spacing:2px}
-
-
+.loadtxt{font-family:'JetBrains Mono',monospace;font-size:11px;color:#4a5568;letter-spacing:3px;text-transform:uppercase}
+.load-logo{font-family:'Syne',sans-serif;font-size:38px;font-weight:800;background:linear-gradient(135deg,#38bdf8,#818cf8,#e879f9);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 
 /* ── AUTH ─── */
-#auth{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:#060810;z-index:999}
-.card{background:#0d1017;border:1px solid rgba(56,189,248,0.22);border-radius:22px;padding:38px 34px;width:420px;max-width:94vw;box-shadow:0 0 60px rgba(56,189,248,0.06),0 24px 48px rgba(0,0,0,0.6)}
-.logo{font-family:'Syne',sans-serif;font-size:42px;font-weight:800;letter-spacing:-1px;background:linear-gradient(135deg,#38bdf8,#818cf8,#e879f9);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:3px}
-.sub{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:3px;color:#4a5568;margin-bottom:28px;text-transform:uppercase}
-.tabs{display:flex;background:rgba(255,255,255,0.05);border-radius:10px;padding:3px;margin-bottom:22px;gap:3px}
-.tab{flex:1;padding:10px;border:none;background:none;color:#4a5568;font-family:'Outfit',sans-serif;font-size:14px;font-weight:600;border-radius:8px;cursor:pointer;transition:all .2s}
-.tab.on{background:rgba(56,189,248,0.14);color:#38bdf8}
-.lbl{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#4a5568;display:block;margin-bottom:7px}
-.inp{width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:11px;padding:12px 14px;color:#e2e8f5;font-family:'Outfit',sans-serif;font-size:15px;outline:none;margin-bottom:14px;transition:border-color .2s}
-.inp:focus{border-color:rgba(56,189,248,0.5)}
-.swatches{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:22px}
-.sw{width:36px;height:36px;border-radius:50%;cursor:pointer;border:3px solid transparent;transition:transform .15s;position:relative}
+#auth{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:var(--bg);z-index:999;padding:16px}
+.auth-bg{position:absolute;inset:0;background:radial-gradient(ellipse at 30% 50%, rgba(56,189,248,0.04) 0%, transparent 60%),radial-gradient(ellipse at 70% 50%, rgba(129,140,248,0.04) 0%, transparent 60%)}
+.card{background:var(--surface);border:1px solid rgba(56,189,248,0.18);border-radius:24px;padding:36px 32px;width:400px;max-width:100%;position:relative;z-index:1;box-shadow:0 0 80px rgba(56,189,248,0.05),0 32px 64px rgba(0,0,0,0.7)}
+.logo{font-family:'Syne',sans-serif;font-size:38px;font-weight:800;letter-spacing:-1px;background:linear-gradient(135deg,#38bdf8,#818cf8,#e879f9);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1;margin-bottom:4px}
+.tagline{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:3px;color:#4a5568;margin-bottom:28px;text-transform:uppercase}
+.tabs{display:flex;background:rgba(255,255,255,0.04);border-radius:11px;padding:3px;margin-bottom:24px;gap:3px}
+.tab{flex:1;padding:9px;border:none;background:none;color:#4a5568;font-family:'Outfit',sans-serif;font-size:14px;font-weight:600;border-radius:8px;cursor:pointer;transition:all .2s}
+.tab.on{background:rgba(56,189,248,0.12);color:#38bdf8}
+.lbl{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#4a5568;display:block;margin-bottom:6px}
+.inp{width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:11px;padding:12px 14px;color:#e2e8f5;font-family:'Outfit',sans-serif;font-size:15px;outline:none;margin-bottom:14px;transition:border-color .2s;-webkit-appearance:none}
+.inp:focus{border-color:rgba(56,189,248,0.45)}
+.inp::placeholder{color:#374151}
+.swatches{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:22px}
+.sw{width:34px;height:34px;border-radius:50%;cursor:pointer;border:3px solid transparent;transition:all .15s;position:relative;flex-shrink:0}
 .sw:hover{transform:scale(1.1)}
 .sw.sel{border-color:#fff;transform:scale(1.12)}
-.sw.sel::after{content:'✓';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;color:rgba(0,0,0,0.75)}
-.abtn{width:100%;padding:13px;background:linear-gradient(135deg,#38bdf8,#818cf8);color:#000;border:none;border-radius:12px;font-family:'Syne',sans-serif;font-size:15px;font-weight:700;letter-spacing:.5px;cursor:pointer;transition:opacity .2s}
+.sw.sel::after{content:'✓';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:rgba(0,0,0,0.8)}
+.abtn{width:100%;padding:13px;background:linear-gradient(135deg,#38bdf8,#818cf8);color:#000;border:none;border-radius:12px;font-family:'Syne',sans-serif;font-size:15px;font-weight:700;letter-spacing:.5px;cursor:pointer;transition:opacity .2s;margin-top:4px}
 .abtn:hover{opacity:.88}
-.abtn:disabled{opacity:.5;cursor:not-allowed}
-.err{color:#f87171;font-family:'JetBrains Mono',monospace;font-size:12px;margin-top:8px;min-height:16px;text-align:center}
-.ulist{display:flex;flex-direction:column;gap:8px;max-height:190px;overflow-y:auto;margin-bottom:6px}
-.urow{display:flex;align-items:center;gap:11px;padding:11px 13px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:11px;cursor:pointer;transition:all .15s}
-.urow:hover{border-color:rgba(56,189,248,0.35);background:rgba(56,189,248,0.05)}
-.av{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#000;flex-shrink:0}
-.uname{font-weight:600;font-size:14px}
-.empty{text-align:center;color:#4a5568;font-family:'JetBrains Mono',monospace;font-size:12px;padding:20px}
+.abtn:disabled{opacity:.45;cursor:not-allowed}
+.err{color:#f87171;font-family:'JetBrains Mono',monospace;font-size:11px;margin-top:8px;min-height:16px;text-align:center;letter-spacing:.5px}
 .pwrap{position:relative}
-.peye{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;color:#4a5568;cursor:pointer;font-size:16px;padding:2px}
+.peye{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;color:#4a5568;cursor:pointer;font-size:16px;padding:4px;line-height:1}
 
 /* ── APP ─── */
-#app{display:none;flex-direction:column;height:100vh}
-.hdr{display:flex;align-items:center;gap:12px;padding:0 18px;height:54px;background:rgba(13,16,23,0.97);border-bottom:1px solid rgba(255,255,255,0.07);z-index:600;flex-shrink:0}
-.hlogo{font-family:'Syne',sans-serif;font-size:21px;font-weight:800;background:linear-gradient(135deg,#38bdf8,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.hplayer{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:5px 12px 5px 7px;cursor:pointer;font-size:14px;font-weight:500;transition:border-color .2s;position:relative}
+#app{display:none;flex-direction:column;height:100dvh;height:100vh}
+.hdr{display:flex;align-items:center;gap:10px;padding:0 16px;height:52px;background:rgba(6,8,16,0.98);border-bottom:1px solid var(--border);z-index:600;flex-shrink:0;backdrop-filter:blur(20px)}
+.hlogo{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;background:linear-gradient(135deg,#38bdf8,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;flex-shrink:0}
+.hplayer{display:flex;align-items:center;gap:7px;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:20px;padding:5px 11px 5px 6px;cursor:pointer;font-size:13px;font-weight:500;transition:border-color .2s;position:relative;flex-shrink:0}
 .hplayer:hover{border-color:rgba(56,189,248,0.35)}
-.hav{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#000;flex-shrink:0}
-.syncing{font-family:'JetBrains Mono',monospace;font-size:10px;color:#4a5568;letter-spacing:1px}
-.syncing.ok{color:#4ade80}.syncing.err{color:#f87171}
-.gpsbadge{margin-left:auto;display:flex;align-items:center;gap:6px;font-family:'JetBrains Mono',monospace;font-size:11px;padding:5px 11px;border-radius:20px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);color:#4a5568}
-.gpsbadge.live{color:#4ade80;border-color:rgba(74,222,128,0.25);background:rgba(74,222,128,0.07)}
-.gpsbadge.weak{color:#fbbf24;border-color:rgba(251,191,36,0.25);background:rgba(251,191,36,0.06)}
-.gdot{width:7px;height:7px;border-radius:50%;background:currentColor;flex-shrink:0}
+.hav{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#000;flex-shrink:0}
+.hright{margin-left:auto;display:flex;align-items:center;gap:8px}
+.syncing{font-family:'JetBrains Mono',monospace;font-size:9px;color:#374151;letter-spacing:1.5px;text-transform:uppercase}
+.syncing.ok{color:#4ade80}.syncing.err{color:#f87171}.syncing.live{color:#38bdf8}
+.gpsbadge{display:flex;align-items:center;gap:5px;font-family:'JetBrains Mono',monospace;font-size:10px;padding:4px 10px;border-radius:20px;background:rgba(255,255,255,0.03);border:1px solid var(--border);color:#4a5568;flex-shrink:0}
+.gpsbadge.live{color:#4ade80;border-color:rgba(74,222,128,0.2);background:rgba(74,222,128,0.06)}
+.gpsbadge.weak{color:#fbbf24;border-color:rgba(251,191,36,0.2);background:rgba(251,191,36,0.05)}
+.gdot{width:6px;height:6px;border-radius:50%;background:currentColor;flex-shrink:0}
 .gpsbadge.live .gdot{animation:gp 1.4s ease-in-out infinite}
-@keyframes gp{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.3;transform:scale(.6)}}
-.layout{display:flex;flex:1;overflow:hidden}
-#map{flex:1;position:relative}
-.sidebar{width:280px;background:#0d1017;border-left:1px solid rgba(255,255,255,0.07);display:flex;flex-direction:column;overflow:hidden;flex-shrink:0}
-.sbscroll{flex:1;overflow-y:auto;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,0.07) transparent}
-.sbs{padding:16px;border-bottom:1px solid rgba(255,255,255,0.07)}
-.sbt{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:#4a5568;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between}
-.sbt-tag{font-size:9px;padding:2px 6px;border-radius:4px;background:rgba(56,189,248,0.1);color:#38bdf8;letter-spacing:1px}
-.sgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.sc{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:13px 11px;position:relative;overflow:hidden}
+@keyframes gp{0%,100%{opacity:1}50%{opacity:.2}}
+
+.layout{display:flex;flex:1;overflow:hidden;min-height:0}
+#map{flex:1;position:relative;z-index:1}
+
+/* Sidebar */
+.sidebar{width:272px;background:var(--surface);border-left:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;flex-shrink:0}
+.sbscroll{flex:1;overflow-y:auto;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,0.06) transparent}
+.sbscroll::-webkit-scrollbar{width:3px}
+.sbscroll::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.07);border-radius:2px}
+.sbs{padding:14px 16px;border-bottom:1px solid var(--border)}
+.sbt{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:#374151;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between}
+.sbt-tag{font-size:8px;padding:2px 6px;border-radius:4px;letter-spacing:1px}
+.sbt-tag.blue{background:rgba(56,189,248,0.1);color:#38bdf8}
+.sbt-tag.green{background:rgba(74,222,128,0.1);color:#4ade80}
+.sgrid{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.sc{background:rgba(255,255,255,0.025);border:1px solid var(--border);border-radius:11px;padding:11px 10px;position:relative;overflow:hidden}
 .sc::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;border-radius:2px 2px 0 0}
 .sc.c1::before{background:linear-gradient(90deg,#38bdf8,#818cf8)}
 .sc.c2::before{background:linear-gradient(90deg,#4ade80,#22d3ee)}
@@ -79,104 +90,146 @@ html,body{height:100%;overflow:hidden;font-family:'Outfit',sans-serif;background
 .sc.c4::before{background:linear-gradient(90deg,#818cf8,#e879f9)}
 .sc.c5::before{background:linear-gradient(90deg,#fbbf24,#f87171)}
 .sc.c6::before{background:linear-gradient(90deg,#34d399,#38bdf8)}
-.sv{font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:700;line-height:1;margin-bottom:4px}
-.sl{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:#4a5568;font-weight:600}
-.si{position:absolute;top:11px;right:9px;font-size:15px;opacity:.22}
-.btrack{height:5px;background:rgba(255,255,255,0.06);border-radius:3px;overflow:hidden;margin-top:6px}
-.bfill{height:100%;border-radius:3px;background:linear-gradient(90deg,#38bdf8,#818cf8);transition:width .5s ease}
-.lbrow{display:flex;align-items:center;gap:9px;padding:9px 10px;border-radius:9px;transition:background .15s;margin-bottom:2px}
-.lbrow.me{background:rgba(56,189,248,0.06);border:1px solid rgba(56,189,248,0.12)}
-.lbrank{font-family:'JetBrains Mono',monospace;font-size:11px;color:#4a5568;width:18px;text-align:center;flex-shrink:0}
-.lbav{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#000;flex-shrink:0}
-.lbn{flex:1;font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.lbs{font-family:'JetBrains Mono',monospace;font-size:11px;padding:2px 7px;border-radius:5px;background:rgba(255,255,255,0.05);color:#4a5568;flex-shrink:0}
-.hist-row{display:flex;justify-content:space-between;align-items:center;padding:8px 10px;border-radius:8px;font-size:12px;margin-bottom:3px;background:rgba(255,255,255,0.02)}
-.hist-date{font-family:'JetBrains Mono',monospace;color:#4a5568;font-size:11px}
-.hist-vals{display:flex;gap:10px;font-family:'JetBrains Mono',monospace;font-size:11px;color:#94a3b8}
-.mctrl{position:absolute;bottom:24px;left:50%;transform:translateX(-50%);display:flex;gap:10px;z-index:500}
-.mb{background:rgba(13,16,23,0.93);border:1px solid rgba(255,255,255,0.09);color:#e2e8f5;border-radius:13px;padding:11px 17px;font-family:'Outfit',sans-serif;font-weight:600;font-size:13px;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:6px;backdrop-filter:blur(12px);box-shadow:0 6px 24px rgba(0,0,0,0.4);white-space:nowrap}
-.mb:hover{border-color:rgba(56,189,248,0.4);color:#38bdf8}
-.mb.go{background:linear-gradient(135deg,#38bdf8,#818cf8);color:#000;border:none;font-family:'Syne',sans-serif;font-size:14px}
-.mb.go:hover{opacity:.9;color:#000}
-.mb.stop{background:linear-gradient(135deg,#ef4444,#f97316);color:#000;border:none;font-family:'Syne',sans-serif}
-.mb.stop:hover{opacity:.9;color:#000}
-#pdd{position:absolute;top:54px;left:90px;background:rgba(10,12,18,0.98);border:1px solid rgba(56,189,248,0.15);border-radius:14px;padding:7px;z-index:800;display:none;min-width:190px;box-shadow:0 16px 48px rgba(0,0,0,0.6);backdrop-filter:blur(16px)}
+.sv{font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:700;line-height:1;margin-bottom:3px;color:#e2e8f5}
+.sl{font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:#374151;font-weight:600}
+.si{position:absolute;top:10px;right:8px;font-size:14px;opacity:.18}
+.btrack{height:4px;background:rgba(255,255,255,0.05);border-radius:3px;overflow:hidden;margin-top:8px}
+.bfill{height:100%;border-radius:3px;background:linear-gradient(90deg,#38bdf8,#818cf8);transition:width .6s ease}
+
+/* Leaderboard */
+.lbrow{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:9px;transition:background .15s;margin-bottom:2px;cursor:default}
+.lbrow.me{background:rgba(56,189,248,0.05);border:1px solid rgba(56,189,248,0.1)}
+.lbrank{font-family:'JetBrains Mono',monospace;font-size:10px;color:#374151;width:18px;text-align:center;flex-shrink:0}
+.lbav{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#000;flex-shrink:0}
+.lbn{flex:1;font-size:12px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lbarea{font-family:'JetBrains Mono',monospace;font-size:10px;color:#4a5568;flex-shrink:0}
+
+/* History */
+.hist-row{display:flex;justify-content:space-between;align-items:center;padding:7px 10px;border-radius:8px;font-size:12px;margin-bottom:3px;background:rgba(255,255,255,0.015)}
+.hist-date{font-family:'JetBrains Mono',monospace;color:#374151;font-size:10px}
+.hist-vals{display:flex;gap:8px;font-family:'JetBrains Mono',monospace;font-size:10px;color:#64748b}
+
+/* Achievements */
+.ach-row{display:flex;align-items:center;gap:10px;padding:9px 10px;background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:10px;margin-bottom:6px}
+.ach-icon{font-size:20px;flex-shrink:0}
+.ach-name{font-size:13px;font-weight:600;color:#e2e8f5}
+.ach-desc{font-size:11px;color:#4a5568;margin-top:1px}
+.ach-row.locked{opacity:.4}
+.ach-row.unlocked{border-color:rgba(251,191,36,0.25);background:rgba(251,191,36,0.04)}
+
+/* Controls */
+.mctrl{position:absolute;bottom:20px;left:50%;transform:translateX(-50%);display:flex;gap:8px;z-index:500;pointer-events:all}
+.mb{background:rgba(6,8,16,0.92);border:1px solid rgba(255,255,255,0.1);color:#e2e8f5;border-radius:14px;padding:11px 16px;font-family:'Outfit',sans-serif;font-weight:600;font-size:13px;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:6px;backdrop-filter:blur(16px);box-shadow:0 4px 20px rgba(0,0,0,0.5);white-space:nowrap;-webkit-tap-highlight-color:transparent}
+.mb:hover,.mb:active{border-color:rgba(56,189,248,0.4);color:#38bdf8}
+.mb.go{background:linear-gradient(135deg,#38bdf8,#818cf8);color:#000;border:none;font-family:'Syne',sans-serif;font-size:14px;font-weight:800}
+.mb.go:hover,.mb.go:active{opacity:.9;color:#000}
+.mb.stop{background:linear-gradient(135deg,#ef4444,#f97316);color:#fff;border:none;font-family:'Syne',sans-serif}
+
+/* Dropdown */
+#pdd{position:absolute;top:52px;left:12px;background:rgba(8,10,18,0.98);border:1px solid rgba(56,189,248,0.12);border-radius:14px;padding:6px;z-index:800;display:none;min-width:200px;box-shadow:0 20px 60px rgba(0,0,0,0.7);backdrop-filter:blur(20px)}
 #pdd.open{display:block}
-.ddi{display:flex;align-items:center;gap:9px;padding:9px 11px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:500;transition:background .15s}
+.ddi{display:flex;align-items:center;gap:9px;padding:9px 12px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:500;transition:background .15s}
 .ddi:hover{background:rgba(255,255,255,0.05)}
-.ddsep{height:1px;background:rgba(255,255,255,0.07);margin:5px 0}
-.dda{display:flex;align-items:center;gap:9px;padding:8px 11px;border-radius:8px;cursor:pointer;font-size:12px;color:#4a5568;transition:all .15s;font-family:'JetBrains Mono',monospace}
+.ddsep{height:1px;background:var(--border);margin:5px 0}
+.dda{display:flex;align-items:center;gap:9px;padding:8px 12px;border-radius:8px;cursor:pointer;font-size:12px;color:#4a5568;transition:all .15s;font-family:'JetBrains Mono',monospace}
 .dda:hover{background:rgba(255,255,255,0.04);color:#e2e8f5}
-#toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%) translateY(10px);background:rgba(13,16,23,0.96);border:1px solid rgba(56,189,248,0.2);border-radius:11px;padding:10px 18px;font-size:13px;font-weight:500;z-index:9000;opacity:0;transition:all .3s cubic-bezier(.34,1.56,.64,1);pointer-events:none;white-space:nowrap;font-family:'JetBrains Mono',monospace;box-shadow:0 6px 24px rgba(0,0,0,0.4)}
-#toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
-@keyframes cflash{0%{opacity:0;transform:translate(-50%,-50%) scale(.5)}30%{opacity:1;transform:translate(-50%,-50%) scale(1.05)}100%{opacity:0;transform:translate(-50%,-50%) scale(1.2)}}
-.cpop{position:fixed;top:50%;left:50%;font-family:'Syne',sans-serif;font-size:28px;font-weight:800;letter-spacing:2px;pointer-events:none;z-index:9000;text-shadow:0 0 30px currentColor;animation:cflash 1.4s ease forwards}
 
-/* ── LOOP CELEBRATION ─── */
-.loop-celebrate{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:9001;pointer-events:none;text-align:center;animation:loopPop 2.5s ease forwards}
-@keyframes loopPop{0%{opacity:0;transform:translate(-50%,-50%) scale(.3)}20%{opacity:1;transform:translate(-50%,-50%) scale(1.1)}30%{transform:translate(-50%,-50%) scale(1)}80%{opacity:1}100%{opacity:0;transform:translate(-50%,-50%) scale(1.3)}}
-.loop-celebrate .lc-title{font-family:'Syne',sans-serif;font-size:36px;font-weight:800;color:#fff;text-shadow:0 0 40px currentColor;margin-bottom:8px}
-.loop-celebrate .lc-sub{font-family:'JetBrains Mono',monospace;font-size:13px;color:rgba(255,255,255,0.7);letter-spacing:2px}
+/* HUDs */
+#speed-hud{position:absolute;top:62px;right:14px;z-index:500;background:rgba(6,8,16,0.9);border:1px solid var(--border);border-radius:14px;padding:12px 15px;text-align:center;display:none;backdrop-filter:blur(16px);min-width:80px}
+.spd-val{font-family:'JetBrains Mono',monospace;font-size:26px;font-weight:700;color:#38bdf8;line-height:1}
+.spd-unit{font-family:'JetBrains Mono',monospace;font-size:9px;color:#374151;letter-spacing:2px;margin-top:2px}
+.spd-cadence{font-family:'JetBrains Mono',monospace;font-size:10px;color:#818cf8;margin-top:5px}
 
-/* ── SPEED INDICATOR ─── */
-#speed-hud{position:absolute;top:70px;right:20px;z-index:500;background:rgba(13,16,23,0.9);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:12px 16px;text-align:center;display:none;backdrop-filter:blur(12px)}
-.speed-val{font-family:'JetBrains Mono',monospace;font-size:28px;font-weight:700;color:#38bdf8;line-height:1}
-.speed-unit{font-family:'JetBrains Mono',monospace;font-size:10px;color:#4a5568;letter-spacing:2px;text-transform:uppercase;margin-top:3px}
-.speed-cadence{font-family:'JetBrains Mono',monospace;font-size:11px;color:#818cf8;margin-top:4px}
-
-/* ── TRAIL STATS HUD ─── */
-#trail-hud{position:absolute;top:70px;left:20px;z-index:500;background:rgba(13,16,23,0.9);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:10px 14px;display:none;backdrop-filter:blur(12px);min-width:140px}
-.th-row{display:flex;justify-content:space-between;gap:16px;margin-bottom:6px}
+#trail-hud{position:absolute;top:62px;left:14px;z-index:500;background:rgba(6,8,16,0.9);border:1px solid var(--border);border-radius:14px;padding:11px 14px;display:none;backdrop-filter:blur(16px);min-width:130px}
+.th-row{display:flex;justify-content:space-between;gap:14px;margin-bottom:7px;align-items:center}
 .th-row:last-child{margin-bottom:0}
-.th-label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:#4a5568}
-.th-val{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:#e2e8f5}
+.th-lbl{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:#374151}
+.th-val{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;color:#e2e8f5}
 
-/* ── LOOP CLOSE HINT ─── */
-#loop-hint{position:absolute;bottom:90px;left:50%;transform:translateX(-50%);z-index:500;background:rgba(13,16,23,0.92);border:1px solid rgba(129,140,248,0.4);border-radius:10px;padding:8px 16px;font-family:'JetBrains Mono',monospace;font-size:11px;color:#818cf8;display:none;backdrop-filter:blur(8px);letter-spacing:1px;white-space:nowrap}
+#loop-hint{position:absolute;bottom:80px;left:50%;transform:translateX(-50%);z-index:500;background:rgba(6,8,16,0.92);border:1px solid rgba(129,140,248,0.35);border-radius:10px;padding:7px 16px;font-family:'JetBrains Mono',monospace;font-size:11px;color:#818cf8;display:none;backdrop-filter:blur(10px);letter-spacing:1px;white-space:nowrap}
 
-@media(max-width:700px){.sidebar{display:none}}
+/* Session Summary Modal */
+#summary-modal{position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:2000;display:none;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(8px)}
+#summary-modal.open{display:flex}
+.sum-card{background:var(--surface);border:1px solid rgba(56,189,248,0.2);border-radius:22px;padding:28px 26px;width:360px;max-width:100%;box-shadow:0 0 60px rgba(56,189,248,0.08),0 24px 60px rgba(0,0,0,0.8)}
+.sum-title{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;margin-bottom:4px;background:linear-gradient(135deg,#38bdf8,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.sum-sub{font-family:'JetBrains Mono',monospace;font-size:10px;color:#4a5568;letter-spacing:2px;margin-bottom:20px}
+.sum-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px}
+.sum-cell{background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:12px;padding:12px 10px;text-align:center}
+.sum-val{font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:700;color:#e2e8f5;line-height:1;margin-bottom:3px}
+.sum-lbl{font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:#374151;font-weight:600}
+.sum-close{width:100%;padding:12px;background:linear-gradient(135deg,#38bdf8,#818cf8);color:#000;border:none;border-radius:11px;font-family:'Syne',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:opacity .2s}
+.sum-close:hover{opacity:.88}
+.sum-ach{background:rgba(251,191,36,0.06);border:1px solid rgba(251,191,36,0.2);border-radius:11px;padding:10px 14px;margin-bottom:14px;display:none}
+.sum-ach-title{font-size:11px;color:#fbbf24;font-family:'JetBrains Mono',monospace;letter-spacing:1px;margin-bottom:6px}
+.sum-ach-list{display:flex;flex-wrap:wrap;gap:6px}
+.sum-ach-item{font-size:18px}
+
+/* Loop celebrate */
+.loop-pop{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:3000;pointer-events:none;text-align:center;animation:lpop 2.8s ease forwards}
+@keyframes lpop{0%{opacity:0;transform:translate(-50%,-50%) scale(.4)}15%{opacity:1;transform:translate(-50%,-50%) scale(1.08)}25%{transform:translate(-50%,-50%) scale(1)}75%{opacity:1}100%{opacity:0;transform:translate(-50%,-50%) scale(1.2)}}
+.lp-title{font-family:'Syne',sans-serif;font-size:32px;font-weight:800;color:#fff;text-shadow:0 0 40px currentColor;margin-bottom:6px}
+.lp-sub{font-family:'JetBrains Mono',monospace;font-size:12px;color:rgba(255,255,255,0.65);letter-spacing:2px;background:rgba(0,0,0,0.5);padding:4px 12px;border-radius:20px}
+
+/* Toast */
+#toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(8px);background:rgba(6,8,16,0.96);border:1px solid rgba(56,189,248,0.18);border-radius:11px;padding:9px 18px;font-size:13px;font-weight:500;z-index:5000;opacity:0;transition:all .3s cubic-bezier(.34,1.56,.64,1);pointer-events:none;white-space:nowrap;font-family:'JetBrains Mono',monospace;box-shadow:0 6px 24px rgba(0,0,0,0.5)}
+#toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* Conquest pop */
+@keyframes cflash{0%{opacity:0;transform:translate(-50%,-50%) scale(.5)}25%{opacity:1;transform:translate(-50%,-50%) scale(1.1)}100%{opacity:0;transform:translate(-50%,-50%) scale(1.3)}}
+.cpop{position:fixed;top:50%;left:50%;font-family:'Syne',sans-serif;font-size:26px;font-weight:800;letter-spacing:2px;pointer-events:none;z-index:4000;text-shadow:0 0 30px currentColor;animation:cflash 1.4s ease forwards}
+
+/* Mobile */
+@media(max-width:700px){
+  .sidebar{display:none}
+  #speed-hud{display:none !important}
+  .mb{padding:10px 14px;font-size:12px}
+}
+/* Scrollbar */
+.sbscroll::-webkit-scrollbar{width:3px}
 </style>
 </head>
 <body>
 
+<!-- LOADING -->
 <div id="loading">
+  <div class="load-logo">TerriTory</div>
   <div class="spin"></div>
-  <div class="loadtxt">CONNECTING TO SERVER...</div>
+  <div class="loadtxt">Connecting...</div>
 </div>
 
-
-
+<!-- AUTH -->
 <div id="auth">
+  <div class="auth-bg"></div>
   <div class="card">
     <div class="logo">TerriTory</div>
-    <div class="sub">Claim · Conquer · Dominate</div>
+    <div class="tagline">Claim · Conquer · Dominate</div>
     <div class="tabs">
       <button class="tab on" id="tLogin">Sign In</button>
-      <button class="tab" id="tRegister">Create Account</button>
+      <button class="tab" id="tRegister">New Account</button>
     </div>
+    <!-- LOGIN -->
     <div id="pLogin">
-      <div class="ulist" id="ulist"></div>
-      <div style="margin-top:10px">
-        <label class="lbl">Or enter username</label>
-        <input class="inp" id="loginUser" placeholder="username" autocomplete="off">
-        <label class="lbl">Password</label>
-        <div class="pwrap">
-          <input class="inp" id="loginPass" type="password" placeholder="password" style="margin-bottom:0;padding-right:40px">
-          <button class="peye" onclick="togglePw('loginPass',this)">👁</button>
-        </div>
+      <label class="lbl">Username</label>
+      <input class="inp" id="loginUser" placeholder="your username" autocomplete="username" autocorrect="off" autocapitalize="none" spellcheck="false">
+      <label class="lbl">Password</label>
+      <div class="pwrap">
+        <input class="inp" id="loginPass" type="password" placeholder="password" autocomplete="current-password" style="margin-bottom:0;padding-right:42px">
+        <button class="peye" onclick="togglePw('loginPass',this)" type="button">👁</button>
       </div>
       <button class="abtn" id="btnLogin" style="margin-top:14px">SIGN IN →</button>
       <div class="err" id="loginErr"></div>
     </div>
+    <!-- REGISTER -->
     <div id="pRegister" style="display:none">
       <label class="lbl">Username</label>
-      <input class="inp" id="inUser" placeholder="e.g. shadow_walker" maxlength="20" autocomplete="off">
+      <input class="inp" id="inUser" placeholder="e.g. shadow_walker" maxlength="20" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false">
       <label class="lbl">Display Name</label>
-      <input class="inp" id="inName" placeholder="Your name on the map" maxlength="16" autocomplete="off">
+      <input class="inp" id="inName" placeholder="Your name on the map" maxlength="18" autocomplete="off">
       <label class="lbl">Password</label>
       <div class="pwrap">
-        <input class="inp" id="inPass" type="password" placeholder="choose a password" style="margin-bottom:14px;padding-right:40px">
-        <button class="peye" onclick="togglePw('inPass',this)">👁</button>
+        <input class="inp" id="inPass" type="password" placeholder="min 6 characters" autocomplete="new-password" style="margin-bottom:14px;padding-right:42px">
+        <button class="peye" onclick="togglePw('inPass',this)" type="button">👁</button>
       </div>
       <label class="lbl">Territory Color</label>
       <div class="swatches" id="swatches"></div>
@@ -186,531 +239,1036 @@ html,body{height:100%;overflow:hidden;font-family:'Outfit',sans-serif;background
   </div>
 </div>
 
+<!-- APP -->
 <div id="app">
   <div class="hdr">
     <div class="hlogo">TerriTory</div>
     <div class="hplayer" id="hplayer">
       <div class="hav" id="hav"></div>
-      <span id="hname"></span>
-      <span style="color:#4a5568;font-size:11px;margin-left:3px">▾</span>
+      <span id="hname" style="max-width:90px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"></span>
+      <span style="color:#374151;font-size:10px;margin-left:2px">▾</span>
     </div>
-    <span class="syncing" id="syncStatus">SYNCING...</span>
-    <div class="gpsbadge" id="gpsbadge">
-      <div class="gdot"></div>
-      <span id="gpstext">READY</span>
+    <div class="hright">
+      <span class="syncing" id="syncStatus">READY</span>
+      <div class="gpsbadge" id="gpsbadge">
+        <div class="gdot"></div>
+        <span id="gpstext">GPS</span>
+      </div>
     </div>
   </div>
   <div id="pdd"></div>
+
   <div class="layout">
     <div id="map">
-      <!-- Speed HUD -->
-      <div id="speed-hud">
-        <div class="speed-val" id="speedVal">0.0</div>
-        <div class="speed-unit">km/h</div>
-        <div class="speed-cadence" id="cadenceVal">— spm</div>
-      </div>
-      <!-- Trail Stats HUD -->
+      <!-- HUDs (only shown while tracking) -->
       <div id="trail-hud">
-        <div class="th-row">
-          <span class="th-label">Time</span>
-          <span class="th-val" id="hudTime">00:00</span>
-        </div>
-        <div class="th-row">
-          <span class="th-label">Pace</span>
-          <span class="th-val" id="hudPace">—</span>
-        </div>
-        <div class="th-row">
-          <span class="th-label">Loops</span>
-          <span class="th-val" id="hudLoops">0</span>
-        </div>
-        <div class="th-row">
-          <span class="th-label">Area</span>
-          <span class="th-val" id="hudArea">0m²</span>
-        </div>
+        <div class="th-row"><span class="th-lbl">Time</span><span class="th-val" id="hudTime">00:00</span></div>
+        <div class="th-row"><span class="th-lbl">Pace</span><span class="th-val" id="hudPace">—:——</span></div>
+        <div class="th-row"><span class="th-lbl">Loops</span><span class="th-val" id="hudLoops">0</span></div>
+        <div class="th-row"><span class="th-lbl">Area</span><span class="th-val" id="hudArea">0m²</span></div>
       </div>
-      <!-- Loop Hint -->
-      <div id="loop-hint">🔁 Close loop to claim territory!</div>
+      <div id="speed-hud">
+        <div class="spd-val" id="speedVal">0.0</div>
+        <div class="spd-unit">km/h</div>
+        <div class="spd-cadence" id="cadenceVal">—</div>
+      </div>
+      <div id="loop-hint">🔁 Return to start to close loop!</div>
     </div>
+
+    <!-- SIDEBAR -->
     <div class="sidebar">
       <div class="sbscroll">
+
+        <!-- Today Stats -->
         <div class="sbs">
-          <div class="sbt">Today's Stats <span class="sbt-tag">LIVE</span></div>
+          <div class="sbt">Today <span class="sbt-tag blue">LIVE</span></div>
           <div class="sgrid">
             <div class="sc c1"><div class="si">👟</div><div class="sv" id="sSteps">0</div><div class="sl">Steps</div></div>
             <div class="sc c2"><div class="si">📏</div><div class="sv" id="sDist">0m</div><div class="sl">Distance</div></div>
             <div class="sc c3"><div class="si">🔥</div><div class="sv" id="sCal">0</div><div class="sl">Calories</div></div>
-            <div class="sc c4"><div class="si">🗺️</div><div class="sv" id="sZones">0</div><div class="sl">Zones</div></div>
-            <div class="sc c5"><div class="si">⚡</div><div class="sv" id="sSpeed">0.0</div><div class="sl">km/h</div></div>
+            <div class="sc c4"><div class="si">⚡</div><div class="sv" id="sSpeed">0.0</div><div class="sl">km/h avg</div></div>
+            <div class="sc c5"><div class="si">🗺️</div><div class="sv" id="sZones">0</div><div class="sl">Zones</div></div>
             <div class="sc c6"><div class="si">🔁</div><div class="sv" id="sLoops">0</div><div class="sl">Loops</div></div>
           </div>
-          <div style="margin-top:12px">
+          <div style="margin-top:10px">
             <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px">
-              <span class="sl">Territory %</span>
-              <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#38bdf8" id="sPct">0%</span>
+              <span class="sl" style="font-size:9px">Territory Share</span>
+              <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#38bdf8" id="sPct">0%</span>
             </div>
             <div class="btrack"><div class="bfill" id="sBar" style="width:0%"></div></div>
           </div>
         </div>
+
+        <!-- Leaderboard -->
         <div class="sbs">
-          <div class="sbt">Leaderboard</div>
+          <div class="sbt">Leaderboard <span class="sbt-tag green">ALL TIME</span></div>
           <div id="lb"></div>
         </div>
+
+        <!-- History -->
         <div class="sbs">
-          <div class="sbt">My History <span class="sbt-tag">7 DAYS</span></div>
+          <div class="sbt">My History <span class="sbt-tag blue">7 DAYS</span></div>
           <div id="histList"></div>
         </div>
+
+        <!-- Achievements -->
+        <div class="sbs">
+          <div class="sbt">Achievements</div>
+          <div id="achList"></div>
+        </div>
+
       </div>
     </div>
   </div>
+
+  <!-- Controls -->
   <div class="mctrl">
-    <button class="mb" id="btnCenter">📍 Center</button>
+    <button class="mb" id="btnCenter">📍</button>
     <button class="mb go" id="btnTrack">▶ START</button>
-    <button class="mb" id="btnReset" style="color:#f87171">↺ Reset</button>
+    <button class="mb" id="btnClearTrail" style="display:none;color:#fbbf24">✕ Trail</button>
+  </div>
+</div>
+
+<!-- Session Summary Modal -->
+<div id="summary-modal">
+  <div class="sum-card">
+    <div class="sum-title">Session Complete! 🏆</div>
+    <div class="sum-sub" id="sumDate">—</div>
+    <div class="sum-ach" id="sumAch">
+      <div class="sum-ach-title">🏅 NEW ACHIEVEMENTS</div>
+      <div class="sum-ach-list" id="sumAchList"></div>
+    </div>
+    <div class="sum-grid">
+      <div class="sum-cell"><div class="sum-val" id="sumSteps">0</div><div class="sum-lbl">Steps</div></div>
+      <div class="sum-cell"><div class="sum-val" id="sumDist">0m</div><div class="sum-lbl">Distance</div></div>
+      <div class="sum-cell"><div class="sum-val" id="sumCal">0</div><div class="sum-lbl">Calories</div></div>
+      <div class="sum-cell"><div class="sum-val" id="sumTime">0:00</div><div class="sum-lbl">Duration</div></div>
+      <div class="sum-cell"><div class="sum-val" id="sumLoops">0</div><div class="sum-lbl">Loops</div></div>
+      <div class="sum-cell"><div class="sum-val" id="sumArea">0m²</div><div class="sum-lbl">Area</div></div>
+    </div>
+    <button class="sum-close" id="btnSumClose">Continue →</button>
   </div>
 </div>
 
 <div id="toast"></div>
 
 <script>
-// ════════════════════════════════════════════════════
-//  CONFIG — hardcoded by admin, invisible to users
-// ════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════════
+//  SUPABASE CONFIG  (hardcoded — users never see this)
+// ══════════════════════════════════════════════════════════════
 var SB_URL = 'https://zvcpyvhnaahxsnoqycfr.supabase.co';
 var SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp2Y3B5dmhuYWFoeHNub3F5Y2ZyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE1OTE0NjMsImV4cCI6MjA4NzE2NzQ2M30.wHMNZfjyYTzWZg0JjQ0fFjNmx7pt-YdG5Kxy2fWk5D0';
 
-// ════════════════════════════════════════════════════
-//  SUPABASE API
-// ════════════════════════════════════════════════════
-function sbUrl(path){ return SB_URL+'/rest/v1/'+path; }
-function sbHeaders(extra){
-  return Object.assign({'Content-Type':'application/json','apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY},extra||{});
-}
-async function sbSelect(table,query){
-  var r=await fetch(sbUrl(table+'?'+query),{headers:sbHeaders({'Prefer':'return=representation'})});
-  if(!r.ok) throw new Error(await r.text());
+// ══════════════════════════════════════════════════════════════
+//  SUPABASE REST HELPERS
+// ══════════════════════════════════════════════════════════════
+function sbH(extra){ return Object.assign({'Content-Type':'application/json','apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Prefer':'return=representation'},extra||{}); }
+function sbU(t){ return SB_URL+'/rest/v1/'+t; }
+
+async function sbQ(table,qs){
+  var r=await fetch(sbU(table)+'?'+qs,{headers:sbH()});
+  if(!r.ok) throw await r.text();
   return r.json();
 }
-async function sbInsert(table,body){
-  var r=await fetch(sbUrl(table),{method:'POST',headers:sbHeaders({'Prefer':'return=representation'}),body:JSON.stringify(body)});
-  if(!r.ok) throw new Error(await r.text());
+async function sbIns(table,body){
+  var r=await fetch(sbU(table),{method:'POST',headers:sbH(),body:JSON.stringify(body)});
+  if(!r.ok) throw await r.text();
   return r.json();
 }
-async function sbUpsert(table,body,onConflict){
-  var url=sbUrl(table)+(onConflict?'?on_conflict='+onConflict:'');
-  var r=await fetch(url,{method:'POST',headers:sbHeaders({'Prefer':'return=representation,resolution=merge-duplicates'}),body:JSON.stringify(body)});
-  if(!r.ok) throw new Error(await r.text());
+async function sbUps(table,body,conflict){
+  var url=sbU(table)+(conflict?'?on_conflict='+conflict:'');
+  var r=await fetch(url,{method:'POST',headers:sbH({'Prefer':'return=representation,resolution=merge-duplicates'}),body:JSON.stringify(body)});
+  if(!r.ok) throw await r.text();
   return r.json();
 }
-async function sbUpdate(table,query,body){
-  var r=await fetch(sbUrl(table+'?'+query),{method:'PATCH',headers:sbHeaders({'Prefer':'return=representation'}),body:JSON.stringify(body)});
-  if(!r.ok) throw new Error(await r.text());
+async function sbPatch(table,qs,body){
+  var r=await fetch(sbU(table)+'?'+qs,{method:'PATCH',headers:sbH(),body:JSON.stringify(body)});
+  if(!r.ok) throw await r.text();
   return r.json();
 }
-async function sbDelete(table,query){
-  var r=await fetch(sbUrl(table+'?'+query),{method:'DELETE',headers:sbHeaders()});
-  if(!r.ok) throw new Error(await r.text());
+async function sbDel(table,qs){
+  var r=await fetch(sbU(table)+'?'+qs,{method:'DELETE',headers:sbH()});
+  if(!r.ok) throw await r.text();
 }
 
-// ════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════════
 //  PASSWORD HASH
-// ════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════════
 async function hashPw(pw){
   var buf=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(pw));
   return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
 }
 
-// ════════════════════════════════════════════════════
-//  STEP COUNTING — PROPER PEDOMETER
-// ════════════════════════════════════════════════════
-/*
-  Real step counting based on accelerometer (DeviceMotion API)
-  Falls back to stride-based estimation from GPS if not available.
-  
-  Algorithm:
-  1. Read accelerometer magnitude = sqrt(ax²+ay²+az²) - 9.8 (gravity-free)
-  2. Low-pass filter to remove noise
-  3. Count peaks above threshold with minimum time gap (debounce)
-*/
-var accelBuffer=[], stepLastTime=0, stepCount=0, accelAvg=0;
-var STEP_THRESHOLD=1.2, STEP_MIN_INTERVAL=250; // ms between steps
-var hasAccel=false, accelPermGranted=false;
+// ══════════════════════════════════════════════════════════════
+//  CONSTANTS & COLORS
+// ══════════════════════════════════════════════════════════════
+var COLORS=['#38bdf8','#4ade80','#f472b6','#fb923c','#a78bfa','#fbbf24','#f87171','#34d399','#e879f9','#22d3ee'];
+var colorIdx=0;
 
-function startAccelerometer(){
-  if(typeof DeviceMotionEvent === 'undefined'){ hasAccel=false; return; }
-  // iOS 13+ requires permission
-  if(typeof DeviceMotionEvent.requestPermission === 'function'){
-    DeviceMotionEvent.requestPermission().then(function(state){
-      if(state==='granted'){ accelPermGranted=true; bindAccel(); }
-      else { hasAccel=false; }
-    }).catch(function(){ hasAccel=false; });
-  } else {
-    accelPermGranted=true;
-    bindAccel();
-  }
-}
+// GPS params
+var GRID=0.00027;          // ~30m grid cells
+var MIN_MOVE_M=6;          // min GPS movement to register (meters)
+var MAX_SPEED_MS=12;       // ~43 km/h — reject GPS jumps above this
+var GPS_SMOOTH=0.4;        // position smoothing factor (0=no change, 1=raw)
+var ACC_GOOD=25, ACC_OK=60; // accuracy thresholds in meters
 
-function bindAccel(){
-  hasAccel=true;
-  window.addEventListener('devicemotion', onDeviceMotion, true);
-  toast('📲 Using accelerometer for step counting');
-}
+// Step counting
+var STEP_THRESH=1.1;       // accelerometer peak threshold (m/s²)
+var STEP_DEBOUNCE=220;     // ms between steps
+var STEP_STRIDE_WALK=0.74; // stride length walking (m)
+var STEP_STRIDE_RUN=1.15;  // stride length running (m)
 
-function onDeviceMotion(e){
-  if(!tracking) return;
-  var a=e.accelerationIncludingGravity;
-  if(!a||a.x==null) return;
-  var mag=Math.sqrt(a.x*a.x + a.y*a.y + a.z*a.z) - 9.8;
-  // Low-pass filter
-  accelAvg=accelAvg*0.8 + mag*0.2;
-  var filtered=mag - accelAvg;
-  var now=Date.now();
-  if(filtered > STEP_THRESHOLD && (now - stepLastTime) > STEP_MIN_INTERVAL){
-    stepLastTime=now;
-    stepCount++;
-    session.steps++;
-    refreshStats();
-  }
-}
+// Loop detection
+var LOOP_CLOSE_M=20;       // meters to "close" a loop
+var MIN_LOOP_POINTS=12;    // minimum trail points before loop can close
+var LOOP_MIN_DIST_M=60;    // minimum path distance before loop detects
 
-function stopAccelerometer(){
-  window.removeEventListener('devicemotion', onDeviceMotion, true);
-  hasAccel=false;
-  accelAvg=0;
-  accelBuffer=[];
-}
+// ══════════════════════════════════════════════════════════════
+//  APP STATE
+// ══════════════════════════════════════════════════════════════
+var me=null;
 
-// GPS-based step estimation (fallback / cross-check)
-function estimateStepsFromDistance(distMeters){
-  // Average stride length varies by speed. Walking ~0.76m, running ~1.2m
-  var strideLen = currentSpeedKmh < 8 ? 0.76 : 1.2;
-  return Math.round(distMeters / strideLen);
-}
+// Session stats (accumulates during current tracking session)
+var session={steps:0,dist:0,cal:0,loops:0,area:0};
+// DB-loaded today stats
+var today_db={steps:0,dist:0,cal:0};
+// Runtime
+var tracking=false, map=null, watchId=null;
+var lastGPS=null, smoothGPS=null, lastGPSTime=null;
+var gpsLocked=false, firstFix=true;
+var currentSpeedKmh=0, speedSamples=[], avgSpeed=0;
+var trackStart=null, timerIv=null;
 
-// ════════════════════════════════════════════════════
-//  STATE
-// ════════════════════════════════════════════════════
-var COLORS=['#38bdf8','#4ade80','#f472b6','#fb923c','#a78bfa','#fbbf24','#f87171','#34d399'];
-var colorIdx=0, me=null;
-var session={steps:0, distance:0, calories:0, loops:0};
-var todayStats={steps:0, distance:0, calories:0};
+// Step counting via accelerometer
+var accel={active:false,avg:0,lastStep:0,sessionSteps:0};
 
-// Trail state
-var trailCoords=[]; // [{lat,lng}] — current session path
-var trailPolyline=null; // Leaflet polyline (glowy trail)
-var trailGlowLine=null; // Wider glow behind
-var closedLoopPolygons=[]; // array of Leaflet polygons
-var loopCount=0;
-var totalArea=0; // m²
+// Trail
+var trailPts=[]; // [[lat,lng],...] current path
+var trailLines=[];  // leaflet polyline refs
+var loopPolygons=[]; // leaflet polygon refs (session, visual only)
+var loopCount=0, totalArea=0;
+var loopHintShown=false, loopHintTimer=null;
+var trailDist=0; // total distance walked this trail segment
 
-// Timing
-var trackingStartTime=null, trackingTimerInterval=null;
+// Map markers
+var myMarker=null, otherMarkers={};
+var allPolygonLayers=[]; // all territory polygons on map (loaded from DB)
 
-// Speed
-var currentSpeedKmh=0, speedHistory=[];
+// Sync
+var syncIv=null, pollIv=null;
 
-// GPS vars
-var map, watchId, tracking=false, lastPos=null, smoothed=null, lastTs=null;
-var markers={}, heatPts=[];
-var GRID=0.00027, MIN_MOVE=5, MAX_SPD=15, SMOOTH=0.35;
-var ACC_ACQUIRING=80, ACC_LOCKED=30, gpsLocked=false, firstFix=true;
-var syncInterval, pollInterval;
+// Achievements
+var ACHIEVEMENTS=[
+  {id:'first_loop',icon:'🔁',name:'First Loop',desc:'Complete your first territory loop',check:function(s){return s.loops>=1}},
+  {id:'speed_demon',icon:'⚡',name:'Speed Demon',desc:'Reach 12+ km/h while tracking',check:function(s){return s.maxSpeed>=12}},
+  {id:'explorer_1k',icon:'🗺️',name:'Explorer',desc:'Walk 1km in one session',check:function(s){return s.dist>=1000}},
+  {id:'explorer_5k',icon:'🌍',name:'Marathoner',desc:'Walk 5km in one session',check:function(s){return s.dist>=5000}},
+  {id:'steps_5k',icon:'👟',name:'5K Steps',desc:'Hit 5,000 steps in a session',check:function(s){return s.steps>=5000}},
+  {id:'conqueror',icon:'⚔️',name:'Conqueror',desc:'Claim a zone from another player',check:function(s){return s.conquered>=1}},
+  {id:'big_loop',icon:'🏟️',name:'Big Loop',desc:'Close a loop over 10,000m²',check:function(s){return s.maxLoopArea>=10000}},
+  {id:'triple_loop',icon:'🔄',name:'Triple Loop',desc:'Complete 3 loops in one session',check:function(s){return s.loops>=3}},
+];
+var sessionAchievements={loops:0,dist:0,steps:0,conquered:0,maxSpeed:0,maxLoopArea:0};
+var unlockedAchievements=new Set();
+var newAchievementsThisSession=[];
 
 function today(){ return new Date().toISOString().slice(0,10); }
 
-// ════════════════════════════════════════════════════
-//  INIT — connect directly, no user setup needed
-// ════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════════
+//  INIT
+// ══════════════════════════════════════════════════════════════
 window.onload=async function(){
   try{
-    await sbSelect('users','select=id&limit=1');
-    showAuth();
-  } catch(e){
+    await sbQ('users','select=id&limit=1');
     document.getElementById('loading').style.display='none';
-    document.getElementById('loading').innerHTML='<div style="color:#f87171;font-family:\'JetBrains Mono\',monospace;font-size:13px;text-align:center;padding:24px">⚠️ Could not connect to server.<br><span style="color:#4a5568;font-size:11px">Check your internet connection and try again.</span></div>';
-    document.getElementById('loading').style.display='flex';
+    document.getElementById('auth').style.display='flex';
+    buildSwatches();
+  } catch(e){
+    document.querySelector('.loadtxt').textContent='Connection failed — check internet';
+    document.querySelector('.loadtxt').style.color='#f87171';
+    document.querySelector('.spin').style.display='none';
   }
 };
 
-function showAuth(){
-  document.getElementById('loading').style.display='none';
-  document.getElementById('auth').style.display='flex';
-  buildSwatches(); loadUserList();
-}
-
-// ════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════════
 //  AUTH
-// ════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════════
 function togglePw(id,btn){
-  var inp=document.getElementById(id);
-  inp.type=inp.type==='password'?'text':'password';
-  btn.textContent=inp.type==='password'?'👁':'🙈';
+  var i=document.getElementById(id);
+  i.type=i.type==='password'?'text':'password';
+  btn.textContent=i.type==='password'?'👁':'🙈';
 }
 document.getElementById('tLogin').onclick=function(){
-  document.getElementById('tLogin').className='tab on';
-  document.getElementById('tRegister').className='tab';
+  this.className='tab on'; document.getElementById('tRegister').className='tab';
   document.getElementById('pLogin').style.display='block';
   document.getElementById('pRegister').style.display='none';
+  document.getElementById('loginErr').textContent='';
 };
 document.getElementById('tRegister').onclick=function(){
-  document.getElementById('tRegister').className='tab on';
-  document.getElementById('tLogin').className='tab';
+  this.className='tab on'; document.getElementById('tLogin').className='tab';
   document.getElementById('pRegister').style.display='block';
   document.getElementById('pLogin').style.display='none';
+  document.getElementById('regErr').textContent='';
 };
 
-async function loadUserList(){
-  var el=document.getElementById('ulist');
-  el.innerHTML='<div class="empty">Loading...</div>';
-  try{
-    var users=await sbSelect('users','select=id,username,display,color&order=username');
-    if(!users.length){ el.innerHTML='<div class="empty">No accounts yet — create one!</div>'; return; }
-    el.innerHTML='';
-    users.forEach(function(u){
-      var row=document.createElement('div'); row.className='urow';
-      row.innerHTML='<div class="av" style="background:'+u.color+'">'+u.display[0].toUpperCase()+'</div>'
-        +'<div><div class="uname">'+u.display+'</div><div style="font-size:11px;color:#4a5568;font-family:\'JetBrains Mono\',monospace">@'+u.username+'</div></div>';
-      row.onclick=function(){ document.getElementById('loginUser').value=u.username; document.getElementById('loginPass').focus(); };
-      el.appendChild(row);
-    });
-  } catch(e){ el.innerHTML='<div class="empty">Could not load users</div>'; }
-}
+// Enter key support
+['loginUser','loginPass'].forEach(function(id){
+  document.getElementById(id).addEventListener('keydown',function(e){ if(e.key==='Enter') document.getElementById('btnLogin').click(); });
+});
+['inUser','inName','inPass'].forEach(function(id){
+  document.getElementById(id).addEventListener('keydown',function(e){ if(e.key==='Enter') document.getElementById('btnCreate').click(); });
+});
 
 document.getElementById('btnLogin').onclick=async function(){
-  var username=document.getElementById('loginUser').value.trim().toLowerCase();
-  var pw=document.getElementById('loginPass').value;
-  var err=document.getElementById('loginErr'); err.textContent='';
-  if(!username||!pw){ err.textContent='Fill in username and password'; return; }
+  var u=document.getElementById('loginUser').value.trim().toLowerCase();
+  var p=document.getElementById('loginPass').value;
+  var err=document.getElementById('loginErr');
+  err.textContent='';
+  if(!u||!p){ err.textContent='Enter username and password'; return; }
   this.textContent='Signing in...'; this.disabled=true;
   try{
-    var hash=await hashPw(pw);
-    var rows=await sbSelect('users','select=*&username=eq.'+encodeURIComponent(username)+'&password_hash=eq.'+encodeURIComponent(hash));
+    var hash=await hashPw(p);
+    var rows=await sbQ('users','select=*&username=eq.'+encodeURIComponent(u)+'&password_hash=eq.'+encodeURIComponent(hash));
     if(!rows.length){ err.textContent='Wrong username or password'; this.textContent='SIGN IN →'; this.disabled=false; return; }
-    me=rows[0]; await launchApp();
-  } catch(e){ err.textContent='Error: '+e.message; this.textContent='SIGN IN →'; this.disabled=false; }
+    me=rows[0];
+    await launch();
+  } catch(e){ err.textContent='Network error, try again'; this.textContent='SIGN IN →'; this.disabled=false; }
 };
 
 document.getElementById('btnCreate').onclick=async function(){
-  var username=document.getElementById('inUser').value.trim().toLowerCase().replace(/[^a-z0-9_]/g,'');
-  var display=document.getElementById('inName').value.trim();
-  var pw=document.getElementById('inPass').value;
-  var err=document.getElementById('regErr'); err.textContent='';
-  if(username.length<2){ err.textContent='Username needs 2+ characters'; return; }
-  if(!display){ err.textContent='Enter a display name'; return; }
-  if(pw.length<4){ err.textContent='Password needs 4+ characters'; return; }
+  var u=document.getElementById('inUser').value.trim().toLowerCase().replace(/[^a-z0-9_]/g,'');
+  var d=document.getElementById('inName').value.trim();
+  var p=document.getElementById('inPass').value;
+  var err=document.getElementById('regErr');
+  err.textContent='';
+  if(u.length<2){ err.textContent='Username: 2+ characters (a-z, 0-9, _)'; return; }
+  if(d.length<1){ err.textContent='Enter a display name'; return; }
+  if(p.length<6){ err.textContent='Password: 6+ characters'; return; }
   this.textContent='Creating...'; this.disabled=true;
   try{
-    var hash=await hashPw(pw);
-    var rows=await sbInsert('users',{username:username,display:display,password_hash:hash,color:COLORS[colorIdx]});
-    me=rows[0]; await launchApp();
+    var hash=await hashPw(p);
+    var rows=await sbIns('users',{username:u,display:d,password_hash:hash,color:COLORS[colorIdx],achievements:'[]',total_loops:0,total_area:0});
+    me=rows[0];
+    await launch();
   } catch(e){
-    if(e.message.includes('unique')) err.textContent='Username already taken!';
-    else err.textContent='Error: '+e.message;
+    var msg=String(e);
+    if(msg.includes('unique')||msg.includes('duplicate')) err.textContent='Username already taken';
+    else err.textContent='Error creating account, try again';
     this.textContent='CREATE ACCOUNT →'; this.disabled=false;
   }
 };
 
-// ════════════════════════════════════════════════════
-//  APP LAUNCH
-// ════════════════════════════════════════════════════
-async function launchApp(){
+// ══════════════════════════════════════════════════════════════
+//  LAUNCH APP
+// ══════════════════════════════════════════════════════════════
+async function launch(){
   document.getElementById('auth').style.display='none';
   document.getElementById('app').style.display='flex';
-  session={steps:0,distance:0,calories:0,loops:0};
-  loopCount=0; totalArea=0; trailCoords=[];
+
+  // Reset all state
+  session={steps:0,dist:0,cal:0,loops:0,area:0};
+  sessionAchievements={loops:0,dist:0,steps:0,conquered:0,maxSpeed:0,maxLoopArea:0};
+  newAchievementsThisSession=[];
+  trailPts=[]; loopCount=0; totalArea=0; trailDist=0;
+  loopHintShown=false; speedSamples=[];
+
+  // Load user's unlocked achievements
+  try{
+    var ach=JSON.parse(me.achievements||'[]');
+    unlockedAchievements=new Set(ach);
+  } catch(e){ unlockedAchievements=new Set(); }
+
   updateHeader();
   if(!map) initMap();
+
+  setSyncStatus('live','LOADING...');
   await loadTodayStats();
-  await loadTerritory();
+  await loadAndRenderAllTerritory(); // load ALL players' territory from DB
   await loadLeaderboard();
   await loadHistory();
-  pollInterval=setInterval(function(){ loadTerritory(); loadLeaderboard(); },15000);
-  syncInterval=setInterval(syncStats,30000);
+  renderAchievements();
+
+  pollIv=setInterval(function(){ loadAndRenderAllTerritory(); loadLeaderboard(); },20000);
+  syncIv=setInterval(flushStats,30000);
   setSyncStatus('ok','SYNCED');
 }
 
-// ════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════════
 //  MAP INIT
-// ════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════════
 function initMap(){
   map=L.map('map',{zoomControl:true,attributionControl:false}).setView([20,0],3);
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{maxZoom:19}).addTo(map);
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{maxZoom:19,subdomains:'abcd'}).addTo(map);
+  // Tap to manually set position
   map.on('click',function(e){
     if(!me||!tracking) return;
-    smoothed={lat:e.latlng.lat,lng:e.latlng.lng};
-    updateMarker(e.latlng.lat,e.latlng.lng);
-    onPos(e.latlng.lat,e.latlng.lng,null);
+    var lat=e.latlng.lat, lng=e.latlng.lng;
+    smoothGPS={lat:lat,lng:lng};
+    placeMyMarker(lat,lng);
+    onValidPos(lat,lng,Date.now());
     toast('📍 Position set manually');
     setBadge('live','Manual');
   });
 }
 
-// ════════════════════════════════════════════════════
-//  GLOWY TRAIL RENDERING
-// ════════════════════════════════════════════════════
-function addTrailPoint(lat,lng){
-  trailCoords.push([lat,lng]);
-
-  // Remove and recreate polylines for glow effect
-  if(trailGlowLine){ map.removeLayer(trailGlowLine); }
-  if(trailPolyline){ map.removeLayer(trailPolyline); }
-
-  if(trailCoords.length < 2) return;
-
-  var c=me.color;
-
-  // Outer glow (wide, transparent)
-  trailGlowLine=L.polyline(trailCoords,{
-    color:c, weight:18, opacity:0.08,
-    lineCap:'round', lineJoin:'round'
-  }).addTo(map);
-
-  // Mid glow
-  L.polyline(trailCoords,{
-    color:c, weight:10, opacity:0.15,
-    lineCap:'round', lineJoin:'round'
-  }).addTo(map);
-
-  // Core trail — bright and thin
-  trailPolyline=L.polyline(trailCoords,{
-    color:c, weight:3.5, opacity:0.95,
-    lineCap:'round', lineJoin:'round'
-  }).addTo(map);
+// ══════════════════════════════════════════════════════════════
+//  TERRITORY: LOAD & RENDER FROM DB (PERSISTENT POLYGONS)
+// ══════════════════════════════════════════════════════════════
+async function loadAndRenderAllTerritory(){
+  try{
+    // territories table stores polygons: id, owner_id, owner_display, owner_color, geojson (polygon coords), area_m2, created_at
+    var rows=await sbQ('territories','select=*&order=created_at.asc');
+    // Remove old polygon layers
+    allPolygonLayers.forEach(function(l){ map.removeLayer(l); });
+    allPolygonLayers=[];
+    rows.forEach(function(r){
+      renderDBPolygon(r);
+    });
+    updateZoneCount(rows);
+  } catch(e){ console.warn('loadTerritory',e); }
 }
 
-function clearTrail(){
-  if(trailGlowLine){ map.removeLayer(trailGlowLine); trailGlowLine=null; }
-  if(trailPolyline){ map.removeLayer(trailPolyline); trailPolyline=null; }
-  // Remove mid glow layers too (track them)
-  trailCoords=[];
+function renderDBPolygon(row){
+  try{
+    var coords=JSON.parse(row.geojson||'[]'); // [[lat,lng],...]
+    if(coords.length<3) return;
+    var c=row.owner_color||'#38bdf8';
+    var isMe=(me&&row.owner_id===me.id);
+    var poly=L.polygon(coords,{
+      color:c, weight:isMe?2:1.5,
+      opacity:isMe?0.9:0.7,
+      fillColor:c,
+      fillOpacity:isMe?0.2:0.13,
+      interactive:true
+    });
+    poly.bindTooltip(row.owner_display,{
+      permanent:false, direction:'center',
+      className:'',
+      opacity:0.9
+    });
+    poly.addTo(map);
+
+    // Name label at centroid
+    var cen=polygonCentroid(coords);
+    var lbl=L.divIcon({
+      html:'<div style="font-family:Syne,sans-serif;font-size:10px;font-weight:800;color:'+c+';text-shadow:0 0 6px '+c+',0 0 12px '+c+'80;white-space:nowrap;letter-spacing:0.5px;pointer-events:none;opacity:0.85">'+row.owner_display+'</div>',
+      className:'',iconAnchor:[40,8]
+    });
+    var lm=L.marker([cen.lat,cen.lng],{icon:lbl,interactive:false,zIndexOffset:-100}).addTo(map);
+
+    allPolygonLayers.push(poly);
+    allPolygonLayers.push(lm);
+  } catch(err){ console.warn('renderDBPolygon',err); }
 }
 
-// ════════════════════════════════════════════════════
-//  LOOP DETECTION & POLYGON SHADING
-// ════════════════════════════════════════════════════
+function updateZoneCount(rows){
+  if(!me) return;
+  var mine=rows.filter(function(r){ return r.owner_id===me.id; });
+  document.getElementById('sZones').textContent=mine.length;
+}
+
+// ══════════════════════════════════════════════════════════════
+//  STEP COUNTING — DUAL MODE
+// ══════════════════════════════════════════════════════════════
 /*
-  Loop detection: when current position is within LOOP_CLOSE_DIST meters
-  of the trail start (or any earlier point), and the trail has at least
-  MIN_LOOP_POINTS points, we close the loop and fill the polygon.
+  PRIMARY: DeviceMotion accelerometer
+  - Measures magnitude of acceleration minus gravity
+  - Peak detection with debounce
+  - Much more accurate than GPS on mobile
   
-  We also check against all earlier points (not just start) to handle
-  figure-8 and self-intersecting paths.
+  FALLBACK: GPS stride estimation
+  - Only when no accelerometer available
+  - Uses speed-dependent stride length
 */
-var LOOP_CLOSE_DIST=25; // meters — how close to "close" a loop
-var MIN_LOOP_POINTS=8; // minimum points before loop can close
-var loopHintShown=false;
-var lastLoopCheckIdx=0;
-
-function checkLoopClose(lat,lng){
-  if(trailCoords.length < MIN_LOOP_POINTS) return;
-
-  // Show hint when trail is getting long enough
-  if(trailCoords.length > 15 && !loopHintShown){
-    loopHintShown=true;
-    var hint=document.getElementById('loop-hint');
-    hint.style.display='block';
-    setTimeout(function(){ hint.style.display='none'; },5000);
+function startAccelerometer(){
+  accel={active:false,avg:0,lastStep:0,sessionSteps:0};
+  if(typeof DeviceMotionEvent==='undefined'){ console.log('No accelerometer'); return; }
+  function attach(){
+    accel.active=true;
+    window.addEventListener('devicemotion',onMotion,{passive:true});
+    toast('📲 Accelerometer active');
   }
+  if(typeof DeviceMotionEvent.requestPermission==='function'){
+    DeviceMotionEvent.requestPermission().then(function(s){
+      if(s==='granted') attach();
+    }).catch(function(){});
+  } else { attach(); }
+}
+function stopAccelerometer(){
+  window.removeEventListener('devicemotion',onMotion);
+  accel.active=false;
+}
 
-  // Check distance to trail start point
-  var start=trailCoords[0];
-  var distToStart=haversine(lat,lng,start[0],start[1]);
+// Sliding window for baseline + peak detection
+var motionBuf=[];
+function onMotion(e){
+  if(!tracking) return;
+  var ag=e.accelerationIncludingGravity;
+  if(!ag||ag.x==null) return;
 
-  if(distToStart < LOOP_CLOSE_DIST && trailCoords.length > MIN_LOOP_POINTS){
-    closeLoop();
+  // Magnitude of total acceleration
+  var mag=Math.sqrt(ag.x*ag.x+ag.y*ag.y+ag.z*ag.z);
+
+  // Keep rolling buffer of last 20 samples for baseline
+  motionBuf.push(mag);
+  if(motionBuf.length>20) motionBuf.shift();
+
+  // Baseline = average of buffer
+  var baseline=motionBuf.reduce(function(a,b){return a+b;},0)/motionBuf.length;
+
+  // Peak above baseline
+  var peak=mag-baseline;
+  var now=Date.now();
+
+  if(peak>STEP_THRESH && (now-accel.lastStep)>STEP_DEBOUNCE){
+    accel.lastStep=now;
+    accel.sessionSteps++;
+    session.steps++;
+    refreshStats();
+  }
+}
+
+function gpsSteps(distM){
+  // Fallback: estimate steps from distance only
+  var stride=(currentSpeedKmh>9)?STEP_STRIDE_RUN:STEP_STRIDE_WALK;
+  return Math.round(distM/stride);
+}
+
+// ══════════════════════════════════════════════════════════════
+//  GPS TRACKING — ACCURATE POSITION FILTERING
+// ══════════════════════════════════════════════════════════════
+document.getElementById('btnTrack').onclick=function(){
+  if(tracking) stopTracking();
+  else startTracking();
+};
+
+function startTracking(){
+  if(!navigator.geolocation){ toast('Geolocation not available'); return; }
+  var btn=document.getElementById('btnTrack');
+  btn.textContent='🛰 Locating...'; btn.disabled=true;
+
+  smoothGPS=null; lastGPS=null; lastGPSTime=null;
+  gpsLocked=false; firstFix=true;
+  trailPts=[]; trailDist=0; loopCount=0; totalArea=0;
+  loopHintShown=false; loopHintTimer=null; motionBuf=[];
+  speedSamples=[]; currentSpeedKmh=0;
+  session={steps:0,dist:0,cal:0,loops:0,area:0};
+  sessionAchievements={loops:0,dist:0,steps:0,conquered:0,maxSpeed:0,maxLoopArea:0};
+  newAchievementsThisSession=[];
+
+  // Clear previous visual trail (not DB polygons)
+  clearTrailVisuals();
+
+  setBadge('weak','LOCATING...');
+  startAccelerometer();
+  trackStart=Date.now();
+  timerIv=setInterval(tickHUD,1000);
+  document.getElementById('trail-hud').style.display='block';
+  document.getElementById('speed-hud').style.display='block';
+  document.getElementById('btnClearTrail').style.display='flex';
+
+  watchId=navigator.geolocation.watchPosition(
+    onGPS, onGPSErr,
+    {enableHighAccuracy:true, maximumAge:1000, timeout:20000}
+  );
+}
+
+function stopTracking(){
+  if(watchId){ navigator.geolocation.clearWatch(watchId); watchId=null; }
+  tracking=false; gpsLocked=false; firstFix=true;
+  stopAccelerometer();
+  clearInterval(timerIv);
+  document.getElementById('trail-hud').style.display='none';
+  document.getElementById('speed-hud').style.display='none';
+  document.getElementById('loop-hint').style.display='none';
+  document.getElementById('btnClearTrail').style.display='none';
+  var btn=document.getElementById('btnTrack');
+  btn.className='mb go'; btn.textContent='▶ START'; btn.disabled=false;
+  setBadge('','IDLE');
+
+  // Check achievements
+  checkAchievements();
+
+  // Flush stats then show summary
+  flushStats().then(function(){
+    showSummary();
+  });
+}
+
+function onGPS(pos){
+  var acc=pos.coords.accuracy;
+  var rlat=pos.coords.latitude, rlng=pos.coords.longitude;
+  var gspd=pos.coords.speed; // m/s, may be null
+  var now=pos.timestamp||Date.now();
+
+  // Update GPS badge
+  if(acc<=ACC_GOOD){ gpsLocked=true; setBadge('live','±'+Math.round(acc)+'m'); }
+  else if(acc<=ACC_OK){ setBadge('weak','±'+Math.round(acc)+'m'); }
+  else{ setBadge('weak','⚠±'+Math.round(acc)+'m'); }
+
+  // First fix — start tracking
+  if(firstFix){
+    firstFix=false; tracking=true;
+    var btn=document.getElementById('btnTrack');
+    btn.className='mb stop'; btn.textContent='⏹ STOP'; btn.disabled=false;
+    smoothGPS={lat:rlat,lng:rlng};
+    lastGPS={lat:rlat,lng:rlng}; lastGPSTime=now;
+    placeMyMarker(rlat,rlng);
+    map.setView([rlat,rlng],17);
     return;
   }
 
-  // Check distance to any earlier point (at least MIN_LOOP_POINTS back from current)
-  // This catches figure-8 loops
-  var checkUntil=trailCoords.length - MIN_LOOP_POINTS;
-  for(var i=lastLoopCheckIdx; i<checkUntil; i++){
-    var d=haversine(lat,lng,trailCoords[i][0],trailCoords[i][1]);
-    if(d < LOOP_CLOSE_DIST){
-      // Close loop using points from i onwards
-      var loopPoints=trailCoords.slice(i);
-      loopPoints.push([lat,lng]);
-      drawLoopPolygon(loopPoints);
-      // Keep trail going but reset loop check
-      lastLoopCheckIdx=trailCoords.length;
-      celebrateLoop(polygonArea(loopPoints));
+  // Reject terrible accuracy (unless we have no other option for a while)
+  if(acc>ACC_OK*2) return;
+
+  // Speed sanity filter — reject GPS teleport jumps
+  if(lastGPS&&lastGPSTime){
+    var dtSec=(now-lastGPSTime)/1000;
+    if(dtSec>0){
+      var rawDist=haversine(lastGPS.lat,lastGPS.lng,rlat,rlng);
+      var impliedSpd=rawDist/dtSec; // m/s
+      if(impliedSpd>MAX_SPEED_MS){ return; } // GPS jump, ignore
+    }
+  }
+
+  // Exponential smoothing of position
+  if(!smoothGPS) smoothGPS={lat:rlat,lng:rlng};
+  else{
+    // Use more smoothing for bad accuracy, less for good
+    var alpha=acc<=ACC_GOOD?GPS_SMOOTH:(GPS_SMOOTH*0.5);
+    smoothGPS.lat+=alpha*(rlat-smoothGPS.lat);
+    smoothGPS.lng+=alpha*(rlng-smoothGPS.lng);
+  }
+
+  // Speed calculation
+  if(lastGPS&&lastGPSTime){
+    var dt2=(now-lastGPSTime)/1000;
+    if(dt2>0){
+      var d=haversine(lastGPS.lat,lastGPS.lng,smoothGPS.lat,smoothGPS.lng);
+      var spd=d/dt2; // m/s
+      // Prefer GPS-provided speed if available and reasonable
+      if(gspd!=null&&gspd>=0&&gspd<MAX_SPEED_MS) spd=gspd;
+      currentSpeedKmh=spd*3.6;
+      speedSamples.push(currentSpeedKmh);
+      if(speedSamples.length>30) speedSamples.shift();
+      if(currentSpeedKmh>sessionAchievements.maxSpeed) sessionAchievements.maxSpeed=currentSpeedKmh;
+    }
+  }
+
+  lastGPS={lat:smoothGPS.lat,lng:smoothGPS.lng};
+  lastGPSTime=now;
+
+  placeMyMarker(smoothGPS.lat,smoothGPS.lng);
+
+  // Only register movement if moved enough (filters GPS noise while standing still)
+  var moveDist=trailPts.length>0?haversine(smoothGPS.lat,smoothGPS.lng,trailPts[trailPts.length-1][0],trailPts[trailPts.length-1][1]):999;
+  if(moveDist<MIN_MOVE_M) return;
+
+  onValidPos(smoothGPS.lat,smoothGPS.lng,now);
+  map.panTo([smoothGPS.lat,smoothGPS.lng],{animate:true,duration:1});
+}
+
+function onGPSErr(err){
+  var msgs={1:'Location denied. Enable in browser settings.',2:'GPS unavailable — go outdoors.',3:'GPS timed out. Try again.'};
+  showGPSError(msgs[err.code]||'GPS error');
+  var btn=document.getElementById('btnTrack');
+  btn.className='mb go'; btn.textContent='▶ START'; btn.disabled=false;
+  tracking=false; setBadge('','ERROR');
+}
+
+function onValidPos(lat,lng,ts){
+  var prev=trailPts.length>0?trailPts[trailPts.length-1]:null;
+  var dist=prev?haversine(lat,lng,prev[0],prev[1]):0;
+
+  // Update stats
+  if(prev){
+    trailDist+=dist;
+    session.dist+=dist;
+    session.cal+=(dist/1000)*62; // ~62 kcal/km average
+    if(!accel.active){
+      session.steps+=gpsSteps(dist);
+    }
+    sessionAchievements.dist=session.dist;
+    sessionAchievements.steps=session.steps;
+  }
+
+  trailPts.push([lat,lng]);
+  drawTrailSegment();
+  checkLoopClose(lat,lng);
+  claimGridZone(Math.floor(lat/GRID)*GRID, Math.floor(lng/GRID)*GRID);
+  refreshStats();
+}
+
+// ══════════════════════════════════════════════════════════════
+//  TRAIL DRAWING  (glowy layered polyline)
+// ══════════════════════════════════════════════════════════════
+function clearTrailVisuals(){
+  trailLines.forEach(function(l){ if(map) map.removeLayer(l); });
+  trailLines=[];
+  loopPolygons.forEach(function(p){ if(map) map.removeLayer(p); });
+  loopPolygons=[];
+}
+
+function drawTrailSegment(){
+  if(trailPts.length<2) return;
+  // Remove and redraw (efficient enough for typical trail lengths)
+  trailLines.forEach(function(l){ map.removeLayer(l); });
+  trailLines=[];
+  var c=me.color;
+  // Outer glow
+  trailLines.push(L.polyline(trailPts,{color:c,weight:22,opacity:0.05,lineCap:'round',lineJoin:'round'}).addTo(map));
+  trailLines.push(L.polyline(trailPts,{color:c,weight:12,opacity:0.1,lineCap:'round',lineJoin:'round'}).addTo(map));
+  // Solid core
+  trailLines.push(L.polyline(trailPts,{color:c,weight:3.5,opacity:0.95,lineCap:'round',lineJoin:'round'}).addTo(map));
+  // Bright leading dot — pulsing dot at last point
+  var last=trailPts[trailPts.length-1];
+  trailLines.push(L.circleMarker(last,{radius:6,color:c,fillColor:c,fillOpacity:1,weight:2,opacity:0.9}).addTo(map));
+}
+
+// ══════════════════════════════════════════════════════════════
+//  LOOP DETECTION
+// ══════════════════════════════════════════════════════════════
+function checkLoopClose(lat,lng){
+  if(trailPts.length<MIN_LOOP_POINTS) return;
+  if(trailDist<LOOP_MIN_DIST_M) return;
+
+  // Show hint after enough distance
+  if(trailDist>80&&!loopHintShown){
+    loopHintShown=true;
+    var h=document.getElementById('loop-hint');
+    h.style.display='block';
+    clearTimeout(loopHintTimer);
+    loopHintTimer=setTimeout(function(){ h.style.display='none'; },6000);
+  }
+
+  // Check if current pos is close to trail start
+  var start=trailPts[0];
+  var distToStart=haversine(lat,lng,start[0],start[1]);
+  if(distToStart<LOOP_CLOSE_M){
+    closeFullLoop();
+    return;
+  }
+
+  // Check if close to any earlier segment (sub-loop detection)
+  // Only check points older than MIN_LOOP_POINTS from end
+  var limit=trailPts.length-MIN_LOOP_POINTS;
+  for(var i=0;i<Math.min(limit,trailPts.length-1);i++){
+    if(haversine(lat,lng,trailPts[i][0],trailPts[i][1])<LOOP_CLOSE_M){
+      // Close sub-loop from index i
+      var sub=trailPts.slice(i);
+      sub.push([lat,lng]);
+      commitLoop(sub);
+      // Keep trail but mark new start from current pos
+      trailPts=[[lat,lng]];
+      trailDist=0; loopHintShown=false;
       break;
     }
   }
 }
 
-function closeLoop(){
-  // Close the full current trail as a loop
-  var loopPoints=trailCoords.slice();
-  loopPoints.push(trailCoords[0]); // close it
-
-  drawLoopPolygon(loopPoints);
-  var area=polygonArea(loopPoints);
-  celebrateLoop(area);
-
-  // Start fresh trail from current position
-  var lastPt=trailCoords[trailCoords.length-1];
-  clearTrail();
-  trailCoords=[lastPt];
-  lastLoopCheckIdx=0;
-  loopHintShown=false;
+function closeFullLoop(){
+  var coords=trailPts.slice();
+  coords.push(trailPts[0]); // close
+  commitLoop(coords);
+  // Reset trail from current position
+  trailPts=[[trailPts[trailPts.length-1][0],trailPts[trailPts.length-1][1]]];
+  trailDist=0; loopHintShown=false;
+  document.getElementById('loop-hint').style.display='none';
 }
 
-function drawLoopPolygon(coords){
+async function commitLoop(coords){
+  var area=polygonArea(coords);
+  if(area<50) return; // too tiny, ignore noise loops
+  loopCount++;
+  totalArea+=area;
+  session.loops++;
+  session.area+=area;
+  sessionAchievements.loops++;
+  if(area>sessionAchievements.maxLoopArea) sessionAchievements.maxLoopArea=area;
+
+  // Draw loop polygon visually
   var c=me.color;
-  var rgb=hexToRgb(c);
-  var polygon=L.polygon(coords,{
-    color:c,
-    weight:2,
-    opacity:0.8,
-    fillColor:c,
-    fillOpacity:0.18
-  }).addTo(map);
+  var poly=L.polygon(coords,{color:c,weight:2,opacity:0.85,fillColor:c,fillOpacity:0.22}).addTo(map);
+  loopPolygons.push(poly);
 
-  // Add player name label in the center of the polygon
-  var center=polygonCentroid(coords);
-  var label=L.divIcon({
-    html:'<div style="font-family:\'Syne\',sans-serif;font-size:11px;font-weight:800;color:'+c+';text-shadow:0 0 8px '+c+',0 0 16px '+c+';white-space:nowrap;letter-spacing:1px;opacity:0.85">'+me.display+'</div>',
-    className:'',
-    iconAnchor:[0,0]
+  // Name label
+  var cen=polygonCentroid(coords);
+  var lbl=L.divIcon({
+    html:'<div style="font-family:Syne,sans-serif;font-size:11px;font-weight:800;color:'+c+';text-shadow:0 0 8px '+c+',0 0 16px '+c+'80;white-space:nowrap;pointer-events:none">'+me.display+'</div>',
+    className:'',iconAnchor:[40,8]
   });
-  L.marker([center.lat,center.lng],{icon:label,interactive:false}).addTo(map);
+  var lm=L.marker([cen.lat,cen.lng],{icon:lbl,interactive:false}).addTo(map);
+  loopPolygons.push(lm);
 
-  closedLoopPolygons.push(polygon);
+  // PERSIST POLYGON TO DB
+  try{
+    await sbIns('territories',{
+      owner_id:me.id,
+      owner_username:me.username,
+      owner_display:me.display,
+      owner_color:me.color,
+      geojson:JSON.stringify(coords),
+      area_m2:Math.round(area),
+      created_at:new Date().toISOString()
+    });
+  } catch(e){ console.warn('save territory',e); }
+
+  // Celebrate
+  celebrateLoop(area);
+  document.getElementById('hudLoops').textContent=loopCount;
+  document.getElementById('sLoops').textContent=loopCount;
+  document.getElementById('hudArea').textContent=fmtArea(totalArea);
 }
 
 function celebrateLoop(area){
-  loopCount++;
-  session.loops++;
-  totalArea+=area;
-  document.getElementById('sLoops').textContent=loopCount;
-  document.getElementById('hudLoops').textContent=loopCount;
-  document.getElementById('hudArea').textContent=formatArea(totalArea);
-
-  // Big visual celebration
   var el=document.createElement('div');
-  el.className='loop-celebrate';
+  el.className='loop-pop';
   el.style.color=me.color;
-  el.innerHTML='<div class="lc-title">🎉 LOOP CLOSED!</div>'
-    +'<div class="lc-sub">+'+formatArea(area)+' CLAIMED</div>';
+  el.innerHTML='<div class="lp-title">🎉 LOOP CLOSED!</div>'
+    +'<div class="lp-sub">+'+fmtArea(area)+' TERRITORY CLAIMED</div>';
   document.body.appendChild(el);
-  setTimeout(function(){ el.remove(); },2600);
+  setTimeout(function(){ el.remove(); },3000);
+  toast('🗺 Loop closed! +'+fmtArea(area));
+}
 
-  toast('🎉 Loop closed! +'+formatArea(area)+' territory');
+// ══════════════════════════════════════════════════════════════
+//  ZONE CLAIMING (grid cells)
+// ══════════════════════════════════════════════════════════════
+var pendingZones={}; // debounce repeated claims of same cell
+async function claimGridZone(lat,lng){
+  var key=lat.toFixed(6)+','+lng.toFixed(6);
+  if(pendingZones[key]) return;
+  pendingZones[key]=true;
+  setTimeout(function(){ delete pendingZones[key]; },5000);
+  try{
+    // Check if this zone is owned by someone else (conquest)
+    var existing=await sbQ('zones','select=*&grid_key=eq.'+encodeURIComponent(key));
+    if(existing.length&&existing[0].owner_id!==me.id){
+      showConquest('⚔️ Conquered!');
+      sessionAchievements.conquered++;
+    }
+    await sbUps('zones',{
+      grid_key:key,lat:lat,lng:lng,
+      owner_id:me.id,owner_username:me.username,
+      owner_display:me.display,owner_color:me.color,
+      intensity:1,updated_at:new Date().toISOString()
+    },'grid_key');
+  } catch(e){ console.warn('claimZone',e); }
+}
+
+// ══════════════════════════════════════════════════════════════
+//  DB: STATS
+// ══════════════════════════════════════════════════════════════
+async function loadTodayStats(){
+  try{
+    var rows=await sbQ('daily_stats','select=*&user_id=eq.'+me.id+'&date=eq.'+today());
+    if(rows.length) today_db={steps:rows[0].steps||0,dist:rows[0].distance_m||0,cal:rows[0].calories||0};
+    else today_db={steps:0,dist:0,cal:0};
+    refreshStats();
+  } catch(e){}
+}
+
+async function flushStats(){
+  if(session.steps===0&&session.dist<1) return;
+  setSyncStatus('live','SYNCING...');
+  try{
+    var rows=await sbQ('daily_stats','select=id,steps,distance_m,calories&user_id=eq.'+me.id+'&date=eq.'+today());
+    var ns=Math.round(today_db.steps+session.steps);
+    var nd=today_db.dist+session.dist;
+    var nc=Math.round(today_db.cal+session.cal);
+    if(rows.length){
+      await sbPatch('daily_stats','id=eq.'+rows[0].id,{steps:ns,distance_m:nd,calories:nc});
+    } else {
+      await sbUps('daily_stats',{user_id:me.id,date:today(),steps:ns,distance_m:nd,calories:nc},'user_id,date');
+    }
+    // Update user's total stats
+    await sbPatch('users','id=eq.'+me.id,{
+      total_loops:(me.total_loops||0)+session.loops,
+      total_area:(me.total_area||0)+Math.round(session.area)
+    });
+    me.total_loops=(me.total_loops||0)+session.loops;
+    me.total_area=(me.total_area||0)+Math.round(session.area);
+    today_db={steps:ns,dist:nd,cal:nc};
+    session={steps:0,dist:0,cal:0,loops:0,area:0};
+    await loadHistory();
+    setSyncStatus('ok','SYNCED');
+  } catch(e){ console.error('flushStats',e); setSyncStatus('err','SYNC ERR'); }
+}
+
+async function loadLeaderboard(){
+  try{
+    // Count territories per user + sum area
+    var rows=await sbQ('territories','select=owner_id,owner_display,owner_color,area_m2');
+    var map2={};
+    rows.forEach(function(r){
+      if(!map2[r.owner_id]) map2[r.owner_id]={display:r.owner_display,color:r.owner_color,loops:0,area:0};
+      map2[r.owner_id].loops++;
+      map2[r.owner_id].area+=r.area_m2||0;
+    });
+    var sorted=Object.values(map2).sort(function(a,b){ return b.area-a.area; });
+    var medals=['🥇','🥈','🥉'];
+    var el=document.getElementById('lb'); el.innerHTML='';
+    if(!sorted.length){ el.innerHTML='<div style="text-align:center;color:#374151;font-family:\'JetBrains Mono\',monospace;font-size:11px;padding:16px">No territory claimed yet</div>'; return; }
+    sorted.slice(0,10).forEach(function(u,i){
+      var isMe=me&&u.display===me.display;
+      var row=document.createElement('div');
+      row.className='lbrow'+(isMe?' me':'');
+      row.innerHTML='<span class="lbrank">'+(medals[i]||i+1)+'</span>'
+        +'<div class="lbav" style="background:'+u.color+'">'+u.display[0].toUpperCase()+'</div>'
+        +'<span class="lbn">'+u.display+'</span>'
+        +'<span class="lbarea">'+fmtArea(u.area)+'</span>';
+      el.appendChild(row);
+    });
+    // Territory % for me
+    var total=sorted.reduce(function(s,r){return s+r.area;},0);
+    var mine=map2[me&&me.id]?map2[me.id].area:0;
+    var pct=total>0?(mine/total*100):0;
+    document.getElementById('sPct').textContent=pct.toFixed(1)+'%';
+    document.getElementById('sBar').style.width=Math.min(100,pct)+'%';
+    document.getElementById('sZones').textContent=map2[me&&me.id]?map2[me.id].loops:0;
+  } catch(e){ console.warn('lb',e); }
+}
+
+async function loadHistory(){
+  try{
+    var rows=await sbQ('daily_stats','select=date,steps,distance_m,calories&user_id=eq.'+me.id+'&order=date.desc&limit=7');
+    var el=document.getElementById('histList'); el.innerHTML='';
+    if(!rows.length){ el.innerHTML='<div style="text-align:center;color:#374151;font-family:\'JetBrains Mono\',monospace;font-size:11px;padding:12px">No history yet — start tracking!</div>'; return; }
+    rows.forEach(function(r){
+      var row=document.createElement('div'); row.className='hist-row';
+      var dist=r.distance_m>=1000?((r.distance_m/1000).toFixed(1)+'km'):(Math.round(r.distance_m)+'m');
+      row.innerHTML='<span class="hist-date">'+r.date+'</span>'
+        +'<div class="hist-vals"><span>'+Math.round(r.steps).toLocaleString()+'👟</span><span>'+dist+'</span><span>'+Math.round(r.calories)+'🔥</span></div>';
+      el.appendChild(row);
+    });
+  } catch(e){}
+}
+
+// ══════════════════════════════════════════════════════════════
+//  ACHIEVEMENTS
+// ══════════════════════════════════════════════════════════════
+function checkAchievements(){
+  var newOnes=[];
+  ACHIEVEMENTS.forEach(function(a){
+    if(!unlockedAchievements.has(a.id)&&a.check(sessionAchievements)){
+      unlockedAchievements.add(a.id);
+      newOnes.push(a);
+      newAchievementsThisSession.push(a);
+    }
+  });
+  if(newOnes.length){
+    // Save to DB
+    try{ sbPatch('users','id=eq.'+me.id,{achievements:JSON.stringify(Array.from(unlockedAchievements))}); } catch(e){}
+  }
+  renderAchievements();
+}
+
+function renderAchievements(){
+  var el=document.getElementById('achList'); el.innerHTML='';
+  ACHIEVEMENTS.forEach(function(a){
+    var unlocked=unlockedAchievements.has(a.id);
+    var row=document.createElement('div');
+    row.className='ach-row'+(unlocked?' unlocked':' locked');
+    row.innerHTML='<div class="ach-icon">'+a.icon+'</div>'
+      +'<div><div class="ach-name">'+a.name+'</div><div class="ach-desc">'+a.desc+'</div></div>'
+      +(unlocked?'<span style="font-size:12px;color:#fbbf24;margin-left:auto">✓</span>':'');
+    el.appendChild(row);
+  });
+}
+
+// ══════════════════════════════════════════════════════════════
+//  SESSION SUMMARY MODAL
+// ══════════════════════════════════════════════════════════════
+function showSummary(){
+  var dur=Math.floor((Date.now()-trackStart)/1000);
+  var mm=Math.floor(dur/60),ss=dur%60;
+  document.getElementById('sumDate').textContent=new Date().toLocaleDateString('en',{weekday:'long',month:'short',day:'numeric'}).toUpperCase();
+  document.getElementById('sumSteps').textContent=(today_db.steps).toLocaleString();
+  document.getElementById('sumDist').textContent=today_db.dist>=1000?((today_db.dist/1000).toFixed(2)+'km'):(Math.round(today_db.dist)+'m');
+  document.getElementById('sumCal').textContent=Math.round(today_db.cal);
+  document.getElementById('sumTime').textContent=mm+':'+(ss<10?'0':'')+ss;
+  document.getElementById('sumLoops').textContent=loopCount;
+  document.getElementById('sumArea').textContent=fmtArea(totalArea);
+  // Achievements
+  if(newAchievementsThisSession.length){
+    document.getElementById('sumAch').style.display='block';
+    document.getElementById('sumAchList').innerHTML=newAchievementsThisSession.map(function(a){
+      return '<span class="sum-ach-item" title="'+a.name+'">'+a.icon+'</span>';
+    }).join('');
+  }
+  document.getElementById('summary-modal').classList.add('open');
+}
+document.getElementById('btnSumClose').onclick=function(){
+  document.getElementById('summary-modal').classList.remove('open');
+  newAchievementsThisSession=[];
+  document.getElementById('sumAch').style.display='none';
+  loadLeaderboard();
+  loadAndRenderAllTerritory();
+};
+
+// ══════════════════════════════════════════════════════════════
+//  HUD TICK
+// ══════════════════════════════════════════════════════════════
+function tickHUD(){
+  if(!tracking) return;
+  var elapsed=Math.floor((Date.now()-trackStart)/1000);
+  var mm=Math.floor(elapsed/60), ss=elapsed%60;
+  document.getElementById('hudTime').textContent=(mm<10?'0':'')+mm+':'+(ss<10?'0':'')+ss;
+  var avg=speedSamples.length?speedSamples.reduce(function(a,b){return a+b;})/speedSamples.length:0;
+  avgSpeed=avg;
+  document.getElementById('speedVal').textContent=avg.toFixed(1);
+  document.getElementById('sSpeed').textContent=avg.toFixed(1);
+  if(avg>0.8){
+    var pskm=3600/avg;
+    var pm=Math.floor(pskm/60), ps=Math.round(pskm%60);
+    document.getElementById('hudPace').textContent=pm+"'"+(ps<10?'0':'')+ps+'"';
+  }
+  // Cadence
+  if(accel.active&&elapsed>10){
+    var spm=Math.round(session.steps/(elapsed/60));
+    document.getElementById('cadenceVal').textContent=spm+' spm';
+  } else {
+    document.getElementById('cadenceVal').textContent=accel.active?'—':'GPS mode';
+  }
+  document.getElementById('hudLoops').textContent=loopCount;
+  document.getElementById('hudArea').textContent=fmtArea(totalArea);
+}
+
+// ══════════════════════════════════════════════════════════════
+//  MARKERS
+// ══════════════════════════════════════════════════════════════
+function placeMyMarker(lat,lng){
+  if(!me||!map) return;
+  if(!myMarker){
+    var ic=L.divIcon({
+      html:'<div style="width:20px;height:20px;border-radius:50%;background:'+me.color+';border:3px solid rgba(255,255,255,0.95);box-shadow:0 0 20px '+me.color+',0 0 40px '+me.color+'60;position:relative">'
+        +'<div style="position:absolute;top:-8px;left:-8px;right:-8px;bottom:-8px;border-radius:50%;border:2px solid '+me.color+'50;animation:gp 1.5s ease-in-out infinite;pointer-events:none"></div>'
+        +'</div>',
+      className:'',iconSize:[20,20],iconAnchor:[10,10]
+    });
+    myMarker=L.marker([lat,lng],{icon:ic,zIndexOffset:1000}).addTo(map);
+  } else myMarker.setLatLng([lat,lng]);
+}
+
+// ══════════════════════════════════════════════════════════════
+//  MATH HELPERS
+// ══════════════════════════════════════════════════════════════
+function haversine(a,b,c,d){
+  var R=6371000,dL=(c-a)*Math.PI/180,dG=(d-b)*Math.PI/180;
+  var x=Math.sin(dL/2)*Math.sin(dL/2)+Math.cos(a*Math.PI/180)*Math.cos(c*Math.PI/180)*Math.sin(dG/2)*Math.sin(dG/2);
+  return R*2*Math.atan2(Math.sqrt(x),Math.sqrt(1-x));
 }
 
 function polygonArea(coords){
-  // Shoelace formula in lat/lng converted to m²
-  var n=coords.length;
-  if(n<3) return 0;
-  var area=0;
-  var R=6371000;
+  var n=coords.length; if(n<3) return 0;
+  var area=0,R=6371000;
   for(var i=0;i<n;i++){
     var j=(i+1)%n;
-    var xi=coords[i][1]*Math.PI/180 * R * Math.cos(coords[i][0]*Math.PI/180);
-    var yi=coords[i][0]*Math.PI/180 * R;
-    var xj=coords[j][1]*Math.PI/180 * R * Math.cos(coords[j][0]*Math.PI/180);
-    var yj=coords[j][0]*Math.PI/180 * R;
-    area+=xi*yj - xj*yi;
+    var xi=coords[i][1]*Math.PI/180*R*Math.cos(coords[i][0]*Math.PI/180);
+    var yi=coords[i][0]*Math.PI/180*R;
+    var xj=coords[j][1]*Math.PI/180*R*Math.cos(coords[j][0]*Math.PI/180);
+    var yj=coords[j][0]*Math.PI/180*R;
+    area+=xi*yj-xj*yi;
   }
   return Math.abs(area/2);
 }
@@ -718,332 +1276,18 @@ function polygonArea(coords){
 function polygonCentroid(coords){
   var lat=0,lng=0;
   coords.forEach(function(c){ lat+=c[0]; lng+=c[1]; });
-  return {lat:lat/coords.length, lng:lng/coords.length};
+  return {lat:lat/coords.length,lng:lng/coords.length};
 }
 
-function formatArea(m2){
+function fmtArea(m2){
   if(m2>=1000000) return (m2/1000000).toFixed(2)+'km²';
   if(m2>=10000) return (m2/10000).toFixed(1)+'ha';
   return Math.round(m2)+'m²';
 }
 
-function hexToRgb(hex){
-  var r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);
-  return {r:r,g:g,b:b};
-}
-
-// ════════════════════════════════════════════════════
-//  BACKEND DATA LOADERS
-// ════════════════════════════════════════════════════
-async function loadTodayStats(){
-  try{
-    var rows=await sbSelect('daily_stats','select=*&user_id=eq.'+me.id+'&date=eq.'+today());
-    if(rows.length) todayStats={steps:rows[0].steps,distance:rows[0].distance_m,calories:rows[0].calories};
-    else todayStats={steps:0,distance:0,calories:0};
-    refreshStats();
-  } catch(e){ console.error('loadTodayStats',e); }
-}
-
-async function loadTerritory(){
-  try{
-    var rows=await sbSelect('territory','select=lat,lng,owner_id,owner_display,owner_color,intensity&limit=5000');
-    heatPts=rows.map(function(r){ return{lat:+r.lat,lng:+r.lng,color:r.owner_color,display:r.owner_display,owner_id:r.owner_id,intensity:+r.intensity}; });
-  } catch(e){ console.error('loadTerritory',e); }
-}
-
-async function loadLeaderboard(){
-  try{
-    var rows=await sbSelect('leaderboard','select=*');
-    var medals=['🥇','🥈','🥉'];
-    var el=document.getElementById('lb'); el.innerHTML='';
-    rows.forEach(function(u,i){
-      var row=document.createElement('div');
-      row.className='lbrow'+(u.id===me.id?' me':'');
-      row.innerHTML='<span class="lbrank">'+(medals[i]||i+1)+'</span>'
-        +'<div class="lbav" style="background:'+u.color+'">'+u.display[0].toUpperCase()+'</div>'
-        +'<span class="lbn">'+u.display+'</span>'
-        +'<span class="lbs">'+u.zone_count+'</span>';
-      el.appendChild(row);
-    });
-    var myRow=rows.find(function(r){ return r.id===me.id; });
-    var tot=rows.reduce(function(s,r){ return s+(+r.zone_count); },0);
-    var mine=myRow?(+myRow.zone_count):0;
-    var pct=tot>0?((mine/tot)*100):0;
-    document.getElementById('sPct').textContent=pct.toFixed(1)+'%';
-    document.getElementById('sBar').style.width=Math.min(100,pct)+'%';
-    document.getElementById('sZones').textContent=mine;
-  } catch(e){ console.error('loadLeaderboard',e); }
-}
-
-async function loadHistory(){
-  try{
-    var rows=await sbSelect('daily_stats','select=date,steps,distance_m,calories&user_id=eq.'+me.id+'&order=date.desc&limit=7');
-    var el=document.getElementById('histList'); el.innerHTML='';
-    if(!rows.length){ el.innerHTML='<div class="empty">No history yet</div>'; return; }
-    rows.forEach(function(r){
-      var row=document.createElement('div'); row.className='hist-row';
-      var dist=+r.distance_m>=1000?((+r.distance_m/1000).toFixed(1)+'km'):(Math.round(+r.distance_m)+'m');
-      row.innerHTML='<span class="hist-date">'+r.date+'</span>'
-        +'<div class="hist-vals"><span>'+Math.round(+r.steps).toLocaleString()+'👟</span><span>'+dist+'</span><span>'+Math.round(+r.calories)+'🔥</span></div>';
-      el.appendChild(row);
-    });
-  } catch(e){ console.error('loadHistory',e); }
-}
-
-async function syncStats(){
-  if(session.steps===0 && session.distance===0) return;
-  setSyncStatus('','SYNCING...');
-  try{
-    var rows=await sbSelect('daily_stats','select=id,steps,distance_m,calories&user_id=eq.'+me.id+'&date=eq.'+today());
-    if(rows.length){
-      await sbUpdate('daily_stats','id=eq.'+rows[0].id,{
-        steps:rows[0].steps+session.steps,
-        distance_m:+rows[0].distance_m+session.distance,
-        calories:+rows[0].calories+session.calories
-      });
-    } else {
-      await sbUpsert('daily_stats',{user_id:me.id,date:today(),steps:session.steps,distance_m:session.distance,calories:session.calories},'user_id,date');
-    }
-    todayStats.steps+=session.steps; todayStats.distance+=session.distance; todayStats.calories+=session.calories;
-    session={steps:0,distance:0,calories:0,loops:session.loops};
-    await loadHistory();
-    setSyncStatus('ok','SYNCED');
-  } catch(e){ console.error('syncStats',e); setSyncStatus('err','SYNC ERR'); }
-}
-
-// ════════════════════════════════════════════════════
-//  GPS TRACKING
-// ════════════════════════════════════════════════════
-function gpsErrMsg(code){
-  if(code===1) return 'Location denied. Allow location in browser settings.';
-  if(code===2) return 'Cannot find location. Go near a window or outdoors.';
-  if(code===3) return 'GPS timed out. Try again.';
-  return 'GPS error.';
-}
-
-document.getElementById('btnTrack').onclick=function(){ if(tracking) stopGPS(); else startGPS(); };
-
-function startGPS(){
-  if(!navigator.geolocation){ toast('Geolocation not supported'); return; }
-  var btn=document.getElementById('btnTrack');
-  btn.textContent='🛰 Locating...'; btn.disabled=true;
-  smoothed=null; lastPos=null; lastTs=null; gpsLocked=false; firstFix=true;
-  setBadge('acquiring','LOCATING...');
-  stepCount=0;
-  session={steps:0,distance:0,calories:0,loops:0};
-  clearTrail();
-  closedLoopPolygons=[];
-  loopCount=0; totalArea=0; loopHintShown=false; lastLoopCheckIdx=0;
-  trackingStartTime=Date.now();
-
-  // Start accelerometer for real step counting
-  startAccelerometer();
-
-  // Start HUD timer
-  document.getElementById('trail-hud').style.display='block';
-  document.getElementById('speed-hud').style.display='block';
-  trackingTimerInterval=setInterval(updateHUD,1000);
-
-  navigator.geolocation.getCurrentPosition(
-    function(pos){ if(map) map.setView([pos.coords.latitude,pos.coords.longitude],17); updateMarker(pos.coords.latitude,pos.coords.longitude); },
-    function(){},
-    {enableHighAccuracy:true,timeout:8000,maximumAge:10000}
-  );
-
-  watchId=navigator.geolocation.watchPosition(
-    function(pos){
-      var acc=pos.coords.accuracy;
-      var rlat=pos.coords.latitude,rlng=pos.coords.longitude,now=pos.timestamp;
-      var spd=pos.coords.speed; // m/s, may be null
-
-      if(acc<=ACC_LOCKED){ gpsLocked=true; setBadge('live','±'+Math.round(acc)+'m'); }
-      else if(acc<=ACC_ACQUIRING){ setBadge('weak','±'+Math.round(acc)+'m...'); }
-      else{ setBadge('weak','⚠ ±'+Math.round(acc)+'m'); }
-
-      if(firstFix){
-        firstFix=false; tracking=true;
-        btn.className='mb stop'; btn.textContent='⏹ STOP'; btn.disabled=false;
-        smoothed={lat:rlat,lng:rlng};
-        updateMarker(rlat,rlng); map.setView([rlat,rlng],17);
-      }
-
-      var maxAcc=gpsLocked?ACC_LOCKED:ACC_ACQUIRING;
-      if(acc>maxAcc){ updateMarker(rlat,rlng); return; }
-
-      // Speed filter — reject if moving impossibly fast
-      if(lastPos&&lastTs){
-        var dt=(now-lastTs)/1000;
-        if(dt>0&&haversine(lastPos.lat,lastPos.lng,rlat,rlng)/dt>MAX_SPD) return;
-      }
-      lastTs=now;
-
-      // Smooth position
-      if(!smoothed) smoothed={lat:rlat,lng:rlng};
-      else{ smoothed.lat+=SMOOTH*(rlat-smoothed.lat); smoothed.lng+=SMOOTH*(rlng-smoothed.lng); }
-
-      var lat=smoothed.lat,lng=smoothed.lng;
-      updateMarker(lat,lng);
-
-      // Only record movement if actually moved enough
-      if(lastPos&&haversine(lastPos.lat,lastPos.lng,lat,lng)<MIN_MOVE) return;
-
-      // Compute speed
-      if(lastPos&&lastTs){
-        var dSec=(now-lastTs)/1000;
-        if(dSec>0){
-          var dMeters=haversine(lastPos.lat,lastPos.lng,lat,lng);
-          var speedMs=dMeters/dSec;
-          currentSpeedKmh=speedMs*3.6;
-          speedHistory.push(currentSpeedKmh);
-          if(speedHistory.length>10) speedHistory.shift();
-        }
-      }
-
-      // Use GPS speed if provided (more accurate)
-      if(spd!=null && spd>=0) currentSpeedKmh=spd*3.6;
-
-      onPos(lat,lng,now);
-      map.panTo([lat,lng]);
-    },
-    function(err){
-      btn.className='mb go'; btn.textContent='▶ START'; btn.disabled=false;
-      tracking=false; setBadge('','READY');
-      showGPSError(gpsErrMsg(err.code));
-    },
-    {enableHighAccuracy:true,maximumAge:2000,timeout:20000}
-  );
-}
-
-function stopGPS(){
-  if(watchId) navigator.geolocation.clearWatch(watchId);
-  tracking=false; gpsLocked=false; firstFix=true; lastPos=null; smoothed=null; lastTs=null;
-  document.getElementById('btnTrack').className='mb go';
-  document.getElementById('btnTrack').textContent='▶ START';
-  setBadge('','PAUSED');
-  stopAccelerometer();
-  clearInterval(trackingTimerInterval);
-  document.getElementById('trail-hud').style.display='none';
-  document.getElementById('speed-hud').style.display='none';
-  document.getElementById('loop-hint').style.display='none';
-  syncStats();
-  toast('Tracking stopped');
-}
-
-function onPos(lat,lng,timestamp){
-  var d=0;
-  if(lastPos){
-    d=haversine(lastPos.lat,lastPos.lng,lat,lng);
-    session.distance+=d;
-    session.calories+=(d/1000)*65; // ~65 cal/km (varies by weight/speed)
-
-    // Step counting:
-    // If accelerometer is active and counting, trust that.
-    // If no accelerometer, estimate from GPS distance.
-    if(!hasAccel){
-      var estSteps=estimateStepsFromDistance(d);
-      session.steps+=estSteps;
-    }
-    // If accelerometer IS active, session.steps is incremented in onDeviceMotion
-  }
-  lastPos={lat:lat,lng:lng};
-
-  // Add to trail
-  addTrailPoint(lat,lng);
-
-  // Check for loop closure
-  checkLoopClose(lat,lng);
-
-  // Claim grid zone
-  claimZone(Math.floor(lat/GRID)*GRID, Math.floor(lng/GRID)*GRID);
-
-  refreshStats();
-}
-
-// ════════════════════════════════════════════════════
-//  HUD UPDATE
-// ════════════════════════════════════════════════════
-function updateHUD(){
-  if(!tracking) return;
-
-  // Timer
-  var elapsed=Math.floor((Date.now()-trackingStartTime)/1000);
-  var mm=Math.floor(elapsed/60), ss=elapsed%60;
-  document.getElementById('hudTime').textContent=(mm<10?'0':'')+mm+':'+(ss<10?'0':'')+ss;
-
-  // Speed display
-  var avgSpeed=speedHistory.length?speedHistory.reduce(function(a,b){return a+b;})/speedHistory.length:0;
-  document.getElementById('speedVal').textContent=avgSpeed.toFixed(1);
-  document.getElementById('sSpeed').textContent=avgSpeed.toFixed(1);
-
-  // Pace (min/km)
-  if(avgSpeed>0.5){
-    var paceSecPerKm=3600/avgSpeed;
-    var paceMin=Math.floor(paceSecPerKm/60), paceSec=Math.round(paceSecPerKm%60);
-    document.getElementById('hudPace').textContent=paceMin+"'"+(paceSec<10?'0':'')+paceSec+'"';
-  }
-
-  // Cadence estimate (steps per minute)
-  if(hasAccel && session.steps>0){
-    var elapsed2=(Date.now()-trackingStartTime)/60000; // minutes
-    var spm=elapsed2>0?Math.round(session.steps/elapsed2):0;
-    document.getElementById('cadenceVal').textContent=spm+' spm';
-  } else if(!hasAccel){
-    document.getElementById('cadenceVal').textContent='GPS mode';
-  }
-
-  document.getElementById('hudLoops').textContent=loopCount;
-  document.getElementById('hudArea').textContent=formatArea(totalArea);
-}
-
-// ════════════════════════════════════════════════════
-//  MARKERS
-// ════════════════════════════════════════════════════
-function updateMarker(lat,lng){
-  if(!me) return;
-  if(!markers[me.id]){
-    var icon=L.divIcon({
-      html:'<div style="width:22px;height:22px;border-radius:50%;background:'+me.color+';border:3px solid rgba(255,255,255,0.9);box-shadow:0 0 18px '+me.color+',0 0 32px '+me.color+'80;position:relative">'
-        +'<div style="position:absolute;inset:-6px;border-radius:50%;border:2px solid '+me.color+'40;animation:gp 1.4s infinite"></div>'
-        +'</div>',
-      className:'',iconSize:[22,22],iconAnchor:[11,11]
-    });
-    markers[me.id]=L.marker([lat,lng],{icon:icon,zIndexOffset:1000}).addTo(map);
-  } else markers[me.id].setLatLng([lat,lng]);
-}
-
-// ════════════════════════════════════════════════════
-//  ZONE CLAIMING
-// ════════════════════════════════════════════════════
-async function claimZone(lat,lng){
-  var key=lat.toFixed(6)+','+lng.toFixed(6);
-  var existing=heatPts.find(function(h){ return Math.abs(h.lat-lat)<0.000001&&Math.abs(h.lng-lng)<0.000001; });
-  if(existing&&existing.owner_id===me.id){
-    existing.intensity=Math.min(5,(existing.intensity||1)+0.2);
-    try{ await sbUpdate('territory','grid_key=eq.'+encodeURIComponent(key),{intensity:existing.intensity}); } catch(e){}
-    return;
-  }
-  if(existing&&existing.owner_id!==me.id){
-    showConquest('⚔️ Conquered!');
-    var idx=heatPts.indexOf(existing); if(idx!==-1) heatPts.splice(idx,1);
-  }
-  try{
-    await sbUpsert('territory',{grid_key:key,lat:lat,lng:lng,owner_id:me.id,owner_username:me.username,owner_display:me.display,owner_color:me.color,intensity:1,conquered_at:new Date().toISOString()},'grid_key');
-    heatPts.push({lat:lat,lng:lng,color:me.color,display:me.display,owner_id:me.id,intensity:1});
-  } catch(e){ console.error('claimZone',e); }
-}
-
-// ════════════════════════════════════════════════════
-//  HAVERSINE
-// ════════════════════════════════════════════════════
-function haversine(a,b,c,d){
-  var R=6371000,dL=(c-a)*Math.PI/180,dG=(d-b)*Math.PI/180;
-  var x=Math.sin(dL/2)*Math.sin(dL/2)+Math.cos(a*Math.PI/180)*Math.cos(c*Math.PI/180)*Math.sin(dG/2)*Math.sin(dG/2);
-  return R*2*Math.atan2(Math.sqrt(x),Math.sqrt(1-x));
-}
-
-// ════════════════════════════════════════════════════
-//  UI HELPERS
-// ════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════════
+//  UI
+// ══════════════════════════════════════════════════════════════
 function updateHeader(){
   document.getElementById('hav').style.background=me.color;
   document.getElementById('hav').textContent=me.display[0].toUpperCase();
@@ -1051,9 +1295,9 @@ function updateHeader(){
 }
 
 function refreshStats(){
-  var steps=(todayStats.steps+session.steps);
-  var dist=(todayStats.distance+session.distance);
-  var cal=(todayStats.calories+session.calories);
+  var steps=today_db.steps+session.steps;
+  var dist=today_db.dist+session.dist;
+  var cal=today_db.cal+session.cal;
   document.getElementById('sSteps').textContent=Math.round(steps).toLocaleString();
   document.getElementById('sDist').textContent=dist>=1000?(dist/1000).toFixed(2)+'km':Math.round(dist)+'m';
   document.getElementById('sCal').textContent=Math.round(cal);
@@ -1065,85 +1309,93 @@ function setBadge(state,text){
   b.className='gpsbadge'+(state==='live'?' live':state==='weak'?' weak':'');
   t.textContent=text;
 }
-function setSyncStatus(state,text){
+function setSyncStatus(s,t){
   var el=document.getElementById('syncStatus');
-  el.textContent=text;
-  el.className='syncing'+(state?' '+state:'');
+  el.textContent=t; el.className='syncing'+(s?' '+s:'');
 }
 function showGPSError(msg){
-  var existing=document.getElementById('gpserr'); if(existing) existing.remove();
+  var old=document.getElementById('gpserr'); if(old) old.remove();
   var el=document.createElement('div'); el.id='gpserr';
-  el.style.cssText='position:absolute;bottom:90px;left:50%;transform:translateX(-50%);background:rgba(13,16,23,0.97);border:1px solid rgba(248,113,113,0.4);border-radius:13px;padding:14px 20px;max-width:320px;text-align:center;z-index:600;font-size:13px;line-height:1.5;color:#fca5a5;font-family:\'JetBrains Mono\',monospace;box-shadow:0 8px 24px rgba(0,0,0,0.5)';
-  el.innerHTML=msg+'<br><span style="color:#4a5568;font-size:11px;margin-top:6px;display:block">Or tap the map to place yourself manually</span>';
+  el.style.cssText='position:absolute;bottom:80px;left:50%;transform:translateX(-50%);background:rgba(6,8,16,0.97);border:1px solid rgba(248,113,113,0.35);border-radius:13px;padding:14px 20px;max-width:90vw;text-align:center;z-index:900;font-size:12px;line-height:1.6;color:#fca5a5;font-family:\'JetBrains Mono\',monospace;box-shadow:0 8px 32px rgba(0,0,0,0.6)';
+  el.innerHTML=msg+'<br><span style="color:#374151;font-size:10px;display:block;margin-top:4px">Or tap the map to set position manually</span>';
   document.getElementById('map').appendChild(el);
   setTimeout(function(){ if(el.parentNode) el.remove(); },8000);
 }
 
-// ════════════════════════════════════════════════════
-//  DROPDOWN / CONTROLS
-// ════════════════════════════════════════════════════
+var toastT;
+function toast(msg){ var t=document.getElementById('toast'); t.textContent=msg; t.className='on'; clearTimeout(toastT); toastT=setTimeout(function(){ t.className=''; },3000); }
+function showConquest(msg){ var el=document.createElement('div'); el.className='cpop'; el.style.color=me.color; el.textContent=msg; document.body.appendChild(el); setTimeout(function(){ el.remove(); },1500); }
+
+// ══════════════════════════════════════════════════════════════
+//  CONTROLS
+// ══════════════════════════════════════════════════════════════
+document.getElementById('btnCenter').onclick=function(){
+  if(!navigator.geolocation){ toast('Geolocation not supported'); return; }
+  navigator.geolocation.getCurrentPosition(
+    function(p){ map&&map.setView([p.coords.latitude,p.coords.longitude],17); },
+    function(e){ toast(({1:'Location denied',2:'No GPS signal',3:'GPS timed out'})[e.code]||'GPS error'); },
+    {enableHighAccuracy:true,timeout:10000,maximumAge:5000}
+  );
+};
+
+document.getElementById('btnClearTrail').onclick=function(){
+  clearTrailVisuals();
+  trailPts=[]; trailDist=0; loopHintShown=false;
+  toast('Trail cleared');
+};
+
+// Dropdown
 document.getElementById('hplayer').onclick=function(e){
   e.stopPropagation();
   var dd=document.getElementById('pdd');
   if(dd.classList.contains('open')){ dd.classList.remove('open'); return; }
   dd.innerHTML='';
-  var back=document.createElement('div'); back.className='dda';
-  back.textContent='⬅ Sign Out';
-  back.onclick=function(){
-    if(tracking) stopGPS();
-    clearInterval(pollInterval); clearInterval(syncInterval);
-    me=null;
+
+  // Profile row
+  var prof=document.createElement('div'); prof.className='ddi';
+  prof.innerHTML='<div style="width:30px;height:30px;border-radius:50%;background:'+me.color+';display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#000">'+me.display[0].toUpperCase()+'</div>'
+    +'<div><div style="font-weight:600;font-size:13px">'+me.display+'</div><div style="font-size:10px;color:#4a5568;font-family:\'JetBrains Mono\',monospace">@'+me.username+'</div></div>';
+  dd.appendChild(prof);
+  var sep=document.createElement('div'); sep.className='ddsep'; dd.appendChild(sep);
+
+  // Stats summary
+  var stats=document.createElement('div'); stats.className='ddi';
+  stats.style.flexDirection='column'; stats.style.alignItems='flex-start'; stats.style.gap='2px';
+  stats.innerHTML='<span style="font-size:10px;color:#4a5568;font-family:\'JetBrains Mono\',monospace;letter-spacing:1px">TOTAL STATS</span>'
+    +'<span style="font-size:12px;color:#94a3b8">'+((me.total_loops)||0)+' loops · '+fmtArea(me.total_area||0)+' claimed</span>';
+  dd.appendChild(stats);
+  var sep2=document.createElement('div'); sep2.className='ddsep'; dd.appendChild(sep2);
+
+  var signout=document.createElement('div'); signout.className='dda';
+  signout.innerHTML='🚪 Sign Out';
+  signout.onclick=function(){
+    if(tracking) stopTracking();
+    clearInterval(pollIv); clearInterval(syncIv);
+    me=null; myMarker=null;
     document.getElementById('app').style.display='none';
     document.getElementById('auth').style.display='flex';
-    loadUserList();
+    document.getElementById('loginUser').value='';
+    document.getElementById('loginPass').value='';
+    document.getElementById('loginErr').textContent='';
     dd.classList.remove('open');
   };
-  dd.appendChild(back);
+  dd.appendChild(signout);
   dd.classList.add('open');
 };
 document.addEventListener('click',function(){ document.getElementById('pdd').classList.remove('open'); });
 
-document.getElementById('btnCenter').onclick=function(){
-  if(!navigator.geolocation){ toast('Geolocation not supported'); return; }
-  navigator.geolocation.getCurrentPosition(
-    function(p){ if(map) map.setView([p.coords.latitude,p.coords.longitude],17); },
-    function(err){ toast(gpsErrMsg(err.code)); },
-    {enableHighAccuracy:true,timeout:10000,maximumAge:5000}
-  );
-};
-
-document.getElementById('btnReset').onclick=async function(){
-  if(!confirm('Delete ALL territory data for everyone? Cannot be undone.')) return;
-  try{
-    await sbDelete('territory','id=gt.0');
-    heatPts=[]; refreshStats(); await loadLeaderboard();
-    clearTrail();
-    closedLoopPolygons.forEach(function(p){ map.removeLayer(p); });
-    closedLoopPolygons=[];
-    toast('Territory reset');
-  } catch(e){ toast('Reset failed: '+e.message); }
-};
-
-// ════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════════
 //  SWATCHES
-// ════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════════
 function buildSwatches(){
   var el=document.getElementById('swatches'); el.innerHTML='';
   COLORS.forEach(function(c,i){
-    var s=document.createElement('div');
-    s.className='sw'+(i===colorIdx?' sel':'');
+    var s=document.createElement('div'); s.className='sw'+(i===colorIdx?' sel':'');
     s.style.background=c;
     s.onclick=function(){ colorIdx=i; document.querySelectorAll('.sw').forEach(function(x,j){ x.className='sw'+(j===i?' sel':''); }); };
     el.appendChild(s);
   });
 }
-
-// ════════════════════════════════════════════════════
-//  TOAST & CONQUEST
-// ════════════════════════════════════════════════════
-var toastT;
-function toast(msg){ var t=document.getElementById('toast'); t.textContent=msg; t.className='on'; clearTimeout(toastT); toastT=setTimeout(function(){ t.className=''; },2800); }
-function showConquest(msg){ var el=document.createElement('div'); el.className='cpop'; el.style.color=me.color; el.textContent=msg; document.body.appendChild(el); setTimeout(function(){ el.remove(); },1500); }
 </script>
 </body>
 </html>
