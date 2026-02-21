@@ -357,6 +357,10 @@ async function sbPatch(table,qs,body){
   if(!r.ok){ var t=await r.text(); throw new Error(t); }
   return r.json();
 }
+async function sbDel(table,qs){
+  var r=await fetch(sbU(table)+'?'+qs,{method:'DELETE',headers:sbH()});
+  if(!r.ok){ var t=await r.text(); throw new Error(t); }
+}
 
 async function hashPw(pw){
   var buf=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(pw));
@@ -812,6 +816,101 @@ function closeFullLoop(){
   document.getElementById('loop-hint').style.display='none';
 }
 
+// ══════════════════════════════════════════════════════════════
+//  CONQUEST MATH
+//  Combined Option A (centroid-inside) + Option B (overlap ≥40%)
+//  A territory is conquered if EITHER condition is true.
+// ══════════════════════════════════════════════════════════════
+
+// Ray-casting: is point [lat,lng] inside polygon coords?
+function pointInPoly(lat, lng, coords){
+  var inside=false, n=coords.length;
+  for(var i=0,j=n-1;i<n;j=i++){
+    var xi=coords[i][0], yi=coords[i][1];
+    var xj=coords[j][0], yj=coords[j][1];
+    if(((yi>lng)!==(yj>lng))&&(lat<(xj-xi)*(lng-yi)/(yj-yi)+xi))
+      inside=!inside;
+  }
+  return inside;
+}
+
+// Approximate overlap area between two polygons using a point-sampling grid.
+// Returns fraction of poly B that lies inside poly A (0.0 – 1.0).
+function overlapFraction(coordsA, coordsB){
+  // Sample a 10×10 grid over poly B's bounding box, count how many land in A
+  var minLat=Infinity,maxLat=-Infinity,minLng=Infinity,maxLng=-Infinity;
+  coordsB.forEach(function(p){
+    if(p[0]<minLat) minLat=p[0]; if(p[0]>maxLat) maxLat=p[0];
+    if(p[1]<minLng) minLng=p[1]; if(p[1]>maxLng) maxLng=p[1];
+  });
+  var SAMPLES=10, inside=0, total=0;
+  for(var r=0;r<=SAMPLES;r++){
+    for(var c=0;c<=SAMPLES;c++){
+      var lat=minLat+(maxLat-minLat)*(r/SAMPLES);
+      var lng=minLng+(maxLng-minLng)*(c/SAMPLES);
+      if(pointInPoly(lat,lng,coordsB)){
+        total++;
+        if(pointInPoly(lat,lng,coordsA)) inside++;
+      }
+    }
+  }
+  return total===0?0:(inside/total);
+}
+
+// Check all existing enemy territories against the new loop.
+// Conquers those whose centroid is inside OR overlap ≥ CONQUEST_OVERLAP_PCT.
+var CONQUEST_OVERLAP_PCT = 0.40; // 40% overlap triggers conquest
+
+async function checkAndConquer(newCoords, newArea){
+  var conquered=[];
+  try{
+    // Fetch all territories NOT owned by me
+    var rows=await sbQ('territories','select=id,owner_id,owner_display,owner_color,geojson,area_m2&owner_id=neq.'+encodeURIComponent(me.id));
+    for(var i=0;i<rows.length;i++){
+      var r=rows[i];
+      var enemyCoords;
+      try{ enemyCoords=JSON.parse(r.geojson); } catch(e){ continue; }
+      if(!enemyCoords||enemyCoords.length<3) continue;
+
+      var enemyCen=polyCentroid(enemyCoords);
+      var cenInside=pointInPoly(enemyCen.lat,enemyCen.lng,newCoords);
+
+      var overlap=0;
+      if(!cenInside){
+        // Only compute overlap if centroid check failed (saves time)
+        overlap=overlapFraction(newCoords,enemyCoords);
+      }
+
+      if(cenInside||overlap>=CONQUEST_OVERLAP_PCT){
+        conquered.push(r);
+      }
+    }
+  } catch(e){ console.warn('checkAndConquer fetch',e); return []; }
+
+  if(!conquered.length) return [];
+
+  // Delete conquered territories from DB and deduct their area from owners
+  var totalConqueredArea=0;
+  var conqueredOwners=[];
+  for(var k=0;k<conquered.length;k++){
+    var victim=conquered[k];
+    try{
+      await sbDel('territories','id=eq.'+victim.id);
+      totalConqueredArea+=victim.area_m2||0;
+      if(conqueredOwners.indexOf(victim.owner_display)<0) conqueredOwners.push(victim.owner_display);
+      // Deduct from victim's total_area
+      var victimRows=await sbQ('users','select=id,total_area&id=eq.'+encodeURIComponent(victim.owner_id));
+      if(victimRows.length){
+        var newVictimArea=Math.max(0,(victimRows[0].total_area||0)-(victim.area_m2||0));
+        await sbPatch('users','id=eq.'+encodeURIComponent(victim.owner_id),{total_area:newVictimArea});
+      }
+    } catch(e){ console.warn('delete conquered',e); }
+  }
+
+  sessionAchievements.conquered+=conquered.length;
+  return conqueredOwners;
+}
+
 async function commitLoop(coords){
   var area=polyArea(coords);
   if(area<50) return;
@@ -819,6 +918,30 @@ async function commitLoop(coords){
   session.loops++; session.area+=area;
   sessionAchievements.loops++;
   if(area>sessionAchievements.maxLoopArea) sessionAchievements.maxLoopArea=area;
+
+  // ── CONQUEST CHECK before saving ──────────────────────────
+  setSyncStatus('live','CONQUERING...');
+  var conqueredFrom=await checkAndConquer(coords,area);
+
+  // ── SAVE new territory to DB ───────────────────────────────
+  try{
+    await sbIns('territories',{
+      owner_id:       me.id,
+      owner_username: me.username,
+      owner_display:  me.display,
+      owner_color:    me.color,
+      geojson:        JSON.stringify(coords),
+      area_m2:        Math.round(area)
+    });
+    // Update my total_area
+    await sbPatch('users','id=eq.'+me.id,{
+      total_area: (me.total_area||0)+Math.round(area)
+    });
+    me.total_area=(me.total_area||0)+Math.round(area);
+    setSyncStatus('ok','SYNCED');
+  } catch(e){ console.warn('save territory',e); setSyncStatus('err','SYNC ERR'); }
+
+  // ── DRAW on map ────────────────────────────────────────────
   var c=me.color;
   var poly=L.polygon(coords,{color:c,weight:2,opacity:0.85,fillColor:c,fillOpacity:0.22}).addTo(mapObj);
   loopPolygons.push(poly);
@@ -830,24 +953,17 @@ async function commitLoop(coords){
   var lm=L.marker([cen.lat,cen.lng],{icon:lbl,interactive:false}).addTo(mapObj);
   loopPolygons.push(lm);
 
-  // SAVE TO DB — only columns that exist: owner_id(text), owner_username, owner_display, owner_color, geojson, area_m2
-  try{
-    await sbIns('territories',{
-      owner_id:       me.id,          // uuid stored as text in your schema
-      owner_username: me.username,
-      owner_display:  me.display,
-      owner_color:    me.color,
-      geojson:        JSON.stringify(coords),
-      area_m2:        Math.round(area)
-    });
-    // Update user's total_area (bigint)
-    await sbPatch('users','id=eq.'+me.id,{
-      total_area: (me.total_area||0) + Math.round(area)
-    });
-    me.total_area=(me.total_area||0)+Math.round(area);
-  } catch(e){ console.warn('save territory',e); }
+  // Reload map to remove conquered polygons visually
+  await loadAndRenderTerritory();
+  await loadLeaderboard();
 
-  celebrateLoop(area);
+  // ── CELEBRATE ──────────────────────────────────────────────
+  if(conqueredFrom.length){
+    celebrateConquest(area, conqueredFrom);
+  } else {
+    celebrateLoop(area);
+  }
+
   document.getElementById('hudLoops').textContent=loopCount;
   document.getElementById('sLoops').textContent=loopCount;
   document.getElementById('hudArea').textContent=fmtArea(totalArea);
@@ -856,10 +972,27 @@ async function commitLoop(coords){
 function celebrateLoop(area){
   var el=document.createElement('div');
   el.className='loop-pop'; el.style.color=me.color;
-  el.innerHTML='<div class="lp-title">🎉 LOOP CLOSED!</div>'+'<div class="lp-sub">+'+fmtArea(area)+' TERRITORY CLAIMED</div>';
+  el.innerHTML='<div class="lp-title">🎉 LOOP CLOSED!</div>'
+    +'<div class="lp-sub">+'+fmtArea(area)+' TERRITORY CLAIMED</div>';
   document.body.appendChild(el);
   setTimeout(function(){ el.remove(); },3000);
   toast('🗺 Loop closed! +'+fmtArea(area));
+}
+
+function celebrateConquest(area, victims){
+  // Big conquest celebration — different from normal loop
+  var el=document.createElement('div');
+  el.className='loop-pop'; el.style.color='#f87171';
+  el.innerHTML='<div class="lp-title" style="color:#f87171;text-shadow:0 0 40px #f87171">⚔️ CONQUERED!</div>'
+    +'<div class="lp-sub">Took from '+victims.join(', ')+'<br>+'+fmtArea(area)+' CAPTURED</div>';
+  document.body.appendChild(el);
+  setTimeout(function(){ el.remove(); },3500);
+  toast('⚔️ Conquered '+victims.join(' & ')+'! +'+fmtArea(area));
+  // Extra screen flash
+  var flash=document.createElement('div');
+  flash.style.cssText='position:fixed;inset:0;background:rgba(239,68,68,0.12);z-index:3500;pointer-events:none;animation:cflash .6s ease forwards';
+  document.body.appendChild(flash);
+  setTimeout(function(){ flash.remove(); },700);
 }
 
 // ══════════════════════════════════════════════════════════════
