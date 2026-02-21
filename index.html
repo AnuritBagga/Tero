@@ -71,7 +71,6 @@ html,body{height:100%;overflow:hidden;font-family:'Outfit',sans-serif;background
 .layout{display:flex;flex:1;overflow:hidden;min-height:0}
 #map{flex:1;position:relative;z-index:1}
 
-/* Sidebar */
 .sidebar{width:272px;background:var(--surface);border-left:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;flex-shrink:0}
 .sbscroll{flex:1;overflow-y:auto;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,0.06) transparent}
 .sbscroll::-webkit-scrollbar{width:3px}
@@ -96,7 +95,6 @@ html,body{height:100%;overflow:hidden;font-family:'Outfit',sans-serif;background
 .btrack{height:4px;background:rgba(255,255,255,0.05);border-radius:3px;overflow:hidden;margin-top:8px}
 .bfill{height:100%;border-radius:3px;background:linear-gradient(90deg,#38bdf8,#818cf8);transition:width .6s ease}
 
-/* Leaderboard */
 .lbrow{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:9px;transition:background .15s;margin-bottom:2px;cursor:default}
 .lbrow.me{background:rgba(56,189,248,0.05);border:1px solid rgba(56,189,248,0.1)}
 .lbrank{font-family:'JetBrains Mono',monospace;font-size:10px;color:#374151;width:18px;text-align:center;flex-shrink:0}
@@ -104,12 +102,10 @@ html,body{height:100%;overflow:hidden;font-family:'Outfit',sans-serif;background
 .lbn{flex:1;font-size:12px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .lbarea{font-family:'JetBrains Mono',monospace;font-size:10px;color:#4a5568;flex-shrink:0}
 
-/* History */
 .hist-row{display:flex;justify-content:space-between;align-items:center;padding:7px 10px;border-radius:8px;font-size:12px;margin-bottom:3px;background:rgba(255,255,255,0.015)}
 .hist-date{font-family:'JetBrains Mono',monospace;color:#374151;font-size:10px}
 .hist-vals{display:flex;gap:8px;font-family:'JetBrains Mono',monospace;font-size:10px;color:#64748b}
 
-/* Achievements */
 .ach-row{display:flex;align-items:center;gap:10px;padding:9px 10px;background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:10px;margin-bottom:6px}
 .ach-icon{font-size:20px;flex-shrink:0}
 .ach-name{font-size:13px;font-weight:600;color:#e2e8f5}
@@ -117,7 +113,6 @@ html,body{height:100%;overflow:hidden;font-family:'Outfit',sans-serif;background
 .ach-row.locked{opacity:.4}
 .ach-row.unlocked{border-color:rgba(251,191,36,0.25);background:rgba(251,191,36,0.04)}
 
-/* Controls */
 .mctrl{position:absolute;bottom:20px;left:50%;transform:translateX(-50%);display:flex;gap:8px;z-index:500;pointer-events:all}
 .mb{background:rgba(6,8,16,0.92);border:1px solid rgba(255,255,255,0.1);color:#e2e8f5;border-radius:14px;padding:11px 16px;font-family:'Outfit',sans-serif;font-weight:600;font-size:13px;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:6px;backdrop-filter:blur(16px);box-shadow:0 4px 20px rgba(0,0,0,0.5);white-space:nowrap;-webkit-tap-highlight-color:transparent}
 .mb:hover,.mb:active{border-color:rgba(56,189,248,0.4);color:#38bdf8}
@@ -125,7 +120,6 @@ html,body{height:100%;overflow:hidden;font-family:'Outfit',sans-serif;background
 .mb.go:hover,.mb.go:active{opacity:.9;color:#000}
 .mb.stop{background:linear-gradient(135deg,#ef4444,#f97316);color:#fff;border:none;font-family:'Syne',sans-serif}
 
-/* Dropdown */
 #pdd{position:absolute;top:52px;left:12px;background:rgba(8,10,18,0.98);border:1px solid rgba(56,189,248,0.12);border-radius:14px;padding:6px;z-index:800;display:none;min-width:200px;box-shadow:0 20px 60px rgba(0,0,0,0.7);backdrop-filter:blur(20px)}
 #pdd.open{display:block}
 .ddi{display:flex;align-items:center;gap:9px;padding:9px 12px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:500;transition:background .15s}
@@ -134,7 +128,6 @@ html,body{height:100%;overflow:hidden;font-family:'Outfit',sans-serif;background
 .dda{display:flex;align-items:center;gap:9px;padding:8px 12px;border-radius:8px;cursor:pointer;font-size:12px;color:#4a5568;transition:all .15s;font-family:'JetBrains Mono',monospace}
 .dda:hover{background:rgba(255,255,255,0.04);color:#e2e8f5}
 
-/* HUDs */
 #speed-hud{position:absolute;top:62px;right:14px;z-index:500;background:rgba(6,8,16,0.9);border:1px solid var(--border);border-radius:14px;padding:12px 15px;text-align:center;display:none;backdrop-filter:blur(16px);min-width:80px}
 .spd-val{font-family:'JetBrains Mono',monospace;font-size:26px;font-weight:700;color:#38bdf8;line-height:1}
 .spd-unit{font-family:'JetBrains Mono',monospace;font-size:9px;color:#374151;letter-spacing:2px;margin-top:2px}
@@ -148,57 +141,44 @@ html,body{height:100%;overflow:hidden;font-family:'Outfit',sans-serif;background
 
 #loop-hint{position:absolute;bottom:80px;left:50%;transform:translateX(-50%);z-index:500;background:rgba(6,8,16,0.92);border:1px solid rgba(129,140,248,0.35);border-radius:10px;padding:7px 16px;font-family:'JetBrains Mono',monospace;font-size:11px;color:#818cf8;display:none;backdrop-filter:blur(10px);letter-spacing:1px;white-space:nowrap}
 
-/* Session Summary Modal */
 #summary-modal{position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:2000;display:none;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(8px)}
 #summary-modal.open{display:flex}
 .sum-card{background:var(--surface);border:1px solid rgba(56,189,248,0.2);border-radius:22px;padding:28px 26px;width:360px;max-width:100%;box-shadow:0 0 60px rgba(56,189,248,0.08),0 24px 60px rgba(0,0,0,0.8)}
 .sum-title{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;margin-bottom:4px;background:linear-gradient(135deg,#38bdf8,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .sum-sub{font-family:'JetBrains Mono',monospace;font-size:10px;color:#4a5568;letter-spacing:2px;margin-bottom:20px}
+.sum-ach{background:rgba(251,191,36,0.06);border:1px solid rgba(251,191,36,0.2);border-radius:11px;padding:10px 14px;margin-bottom:14px;display:none}
+.sum-ach-title{font-size:11px;color:#fbbf24;font-family:'JetBrains Mono',monospace;letter-spacing:1px;margin-bottom:6px}
+.sum-ach-list{display:flex;flex-wrap:wrap;gap:6px}
+.sum-ach-item{font-size:18px}
 .sum-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px}
 .sum-cell{background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:12px;padding:12px 10px;text-align:center}
 .sum-val{font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:700;color:#e2e8f5;line-height:1;margin-bottom:3px}
 .sum-lbl{font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:#374151;font-weight:600}
 .sum-close{width:100%;padding:12px;background:linear-gradient(135deg,#38bdf8,#818cf8);color:#000;border:none;border-radius:11px;font-family:'Syne',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:opacity .2s}
 .sum-close:hover{opacity:.88}
-.sum-ach{background:rgba(251,191,36,0.06);border:1px solid rgba(251,191,36,0.2);border-radius:11px;padding:10px 14px;margin-bottom:14px;display:none}
-.sum-ach-title{font-size:11px;color:#fbbf24;font-family:'JetBrains Mono',monospace;letter-spacing:1px;margin-bottom:6px}
-.sum-ach-list{display:flex;flex-wrap:wrap;gap:6px}
-.sum-ach-item{font-size:18px}
 
-/* Loop celebrate */
 .loop-pop{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:3000;pointer-events:none;text-align:center;animation:lpop 2.8s ease forwards}
 @keyframes lpop{0%{opacity:0;transform:translate(-50%,-50%) scale(.4)}15%{opacity:1;transform:translate(-50%,-50%) scale(1.08)}25%{transform:translate(-50%,-50%) scale(1)}75%{opacity:1}100%{opacity:0;transform:translate(-50%,-50%) scale(1.2)}}
 .lp-title{font-family:'Syne',sans-serif;font-size:32px;font-weight:800;color:#fff;text-shadow:0 0 40px currentColor;margin-bottom:6px}
 .lp-sub{font-family:'JetBrains Mono',monospace;font-size:12px;color:rgba(255,255,255,0.65);letter-spacing:2px;background:rgba(0,0,0,0.5);padding:4px 12px;border-radius:20px}
 
-/* Toast */
 #toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(8px);background:rgba(6,8,16,0.96);border:1px solid rgba(56,189,248,0.18);border-radius:11px;padding:9px 18px;font-size:13px;font-weight:500;z-index:5000;opacity:0;transition:all .3s cubic-bezier(.34,1.56,.64,1);pointer-events:none;white-space:nowrap;font-family:'JetBrains Mono',monospace;box-shadow:0 6px 24px rgba(0,0,0,0.5)}
 #toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
 
-/* Conquest pop */
 @keyframes cflash{0%{opacity:0;transform:translate(-50%,-50%) scale(.5)}25%{opacity:1;transform:translate(-50%,-50%) scale(1.1)}100%{opacity:0;transform:translate(-50%,-50%) scale(1.3)}}
 .cpop{position:fixed;top:50%;left:50%;font-family:'Syne',sans-serif;font-size:26px;font-weight:800;letter-spacing:2px;pointer-events:none;z-index:4000;text-shadow:0 0 30px currentColor;animation:cflash 1.4s ease forwards}
 
-/* Mobile */
-@media(max-width:700px){
-  .sidebar{display:none}
-  #speed-hud{display:none !important}
-  .mb{padding:10px 14px;font-size:12px}
-}
-/* Scrollbar */
-.sbscroll::-webkit-scrollbar{width:3px}
+@media(max-width:700px){.sidebar{display:none}#speed-hud{display:none !important}.mb{padding:10px 14px;font-size:12px}}
 </style>
 </head>
 <body>
 
-<!-- LOADING -->
 <div id="loading">
   <div class="load-logo">TerriTory</div>
   <div class="spin"></div>
   <div class="loadtxt">Connecting...</div>
 </div>
 
-<!-- AUTH -->
 <div id="auth">
   <div class="auth-bg"></div>
   <div class="card">
@@ -208,7 +188,6 @@ html,body{height:100%;overflow:hidden;font-family:'Outfit',sans-serif;background
       <button class="tab on" id="tLogin">Sign In</button>
       <button class="tab" id="tRegister">New Account</button>
     </div>
-    <!-- LOGIN -->
     <div id="pLogin">
       <label class="lbl">Username</label>
       <input class="inp" id="loginUser" placeholder="your username" autocomplete="username" autocorrect="off" autocapitalize="none" spellcheck="false">
@@ -220,7 +199,6 @@ html,body{height:100%;overflow:hidden;font-family:'Outfit',sans-serif;background
       <button class="abtn" id="btnLogin" style="margin-top:14px">SIGN IN →</button>
       <div class="err" id="loginErr"></div>
     </div>
-    <!-- REGISTER -->
     <div id="pRegister" style="display:none">
       <label class="lbl">Username</label>
       <input class="inp" id="inUser" placeholder="e.g. shadow_walker" maxlength="20" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false">
@@ -239,7 +217,6 @@ html,body{height:100%;overflow:hidden;font-family:'Outfit',sans-serif;background
   </div>
 </div>
 
-<!-- APP -->
 <div id="app">
   <div class="hdr">
     <div class="hlogo">TerriTory</div>
@@ -260,7 +237,6 @@ html,body{height:100%;overflow:hidden;font-family:'Outfit',sans-serif;background
 
   <div class="layout">
     <div id="map">
-      <!-- HUDs (only shown while tracking) -->
       <div id="trail-hud">
         <div class="th-row"><span class="th-lbl">Time</span><span class="th-val" id="hudTime">00:00</span></div>
         <div class="th-row"><span class="th-lbl">Pace</span><span class="th-val" id="hudPace">—:——</span></div>
@@ -275,11 +251,8 @@ html,body{height:100%;overflow:hidden;font-family:'Outfit',sans-serif;background
       <div id="loop-hint">🔁 Return to start to close loop!</div>
     </div>
 
-    <!-- SIDEBAR -->
     <div class="sidebar">
       <div class="sbscroll">
-
-        <!-- Today Stats -->
         <div class="sbs">
           <div class="sbt">Today <span class="sbt-tag blue">LIVE</span></div>
           <div class="sgrid">
@@ -287,7 +260,7 @@ html,body{height:100%;overflow:hidden;font-family:'Outfit',sans-serif;background
             <div class="sc c2"><div class="si">📏</div><div class="sv" id="sDist">0m</div><div class="sl">Distance</div></div>
             <div class="sc c3"><div class="si">🔥</div><div class="sv" id="sCal">0</div><div class="sl">Calories</div></div>
             <div class="sc c4"><div class="si">⚡</div><div class="sv" id="sSpeed">0.0</div><div class="sl">km/h avg</div></div>
-            <div class="sc c5"><div class="si">🗺️</div><div class="sv" id="sZones">0</div><div class="sl">Zones</div></div>
+            <div class="sc c5"><div class="si">🗺️</div><div class="sv" id="sZones">0</div><div class="sl">Territories</div></div>
             <div class="sc c6"><div class="si">🔁</div><div class="sv" id="sLoops">0</div><div class="sl">Loops</div></div>
           </div>
           <div style="margin-top:10px">
@@ -298,30 +271,22 @@ html,body{height:100%;overflow:hidden;font-family:'Outfit',sans-serif;background
             <div class="btrack"><div class="bfill" id="sBar" style="width:0%"></div></div>
           </div>
         </div>
-
-        <!-- Leaderboard -->
         <div class="sbs">
           <div class="sbt">Leaderboard <span class="sbt-tag green">ALL TIME</span></div>
           <div id="lb"></div>
         </div>
-
-        <!-- History -->
         <div class="sbs">
           <div class="sbt">My History <span class="sbt-tag blue">7 DAYS</span></div>
           <div id="histList"></div>
         </div>
-
-        <!-- Achievements -->
         <div class="sbs">
           <div class="sbt">Achievements</div>
           <div id="achList"></div>
         </div>
-
       </div>
     </div>
   </div>
 
-  <!-- Controls -->
   <div class="mctrl">
     <button class="mb" id="btnCenter">📍</button>
     <button class="mb go" id="btnTrack">▶ START</button>
@@ -329,7 +294,6 @@ html,body{height:100%;overflow:hidden;font-family:'Outfit',sans-serif;background
   </div>
 </div>
 
-<!-- Session Summary Modal -->
 <div id="summary-modal">
   <div class="sum-card">
     <div class="sum-title">Session Complete! 🏆</div>
@@ -354,125 +318,93 @@ html,body{height:100%;overflow:hidden;font-family:'Outfit',sans-serif;background
 
 <script>
 // ══════════════════════════════════════════════════════════════
-//  SUPABASE CONFIG  (hardcoded — users never see this)
+//  SUPABASE CONFIG  ← paste your URL and key here
 // ══════════════════════════════════════════════════════════════
 var SB_URL = 'https://znvylvdoguwlarneknrh.supabase.co';
 var SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpudnlsdmRvZ3V3bGFybmVrbnJoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE2NzAyOTEsImV4cCI6MjA4NzI0NjI5MX0.IO2Zm_Rx2E1F2gDLpIV29r-D2TDEPH3VAchNHaoxWDI';
 
 // ══════════════════════════════════════════════════════════════
-//  SUPABASE REST HELPERS
+//  SUPABASE HELPERS
 // ══════════════════════════════════════════════════════════════
-function sbH(extra){ return Object.assign({'Content-Type':'application/json','apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Prefer':'return=representation'},extra||{}); }
+function sbH(extra){
+  return Object.assign({
+    'Content-Type':'application/json',
+    'apikey':SB_KEY,
+    'Authorization':'Bearer '+SB_KEY,
+    'Prefer':'return=representation'
+  }, extra||{});
+}
 function sbU(t){ return SB_URL+'/rest/v1/'+t; }
 
 async function sbQ(table,qs){
   var r=await fetch(sbU(table)+'?'+qs,{headers:sbH()});
-  if(!r.ok) throw await r.text();
+  if(!r.ok){ var t=await r.text(); throw new Error(t); }
   return r.json();
 }
 async function sbIns(table,body){
   var r=await fetch(sbU(table),{method:'POST',headers:sbH(),body:JSON.stringify(body)});
-  if(!r.ok) throw await r.text();
+  if(!r.ok){ var t=await r.text(); throw new Error(t); }
   return r.json();
 }
 async function sbUps(table,body,conflict){
   var url=sbU(table)+(conflict?'?on_conflict='+conflict:'');
   var r=await fetch(url,{method:'POST',headers:sbH({'Prefer':'return=representation,resolution=merge-duplicates'}),body:JSON.stringify(body)});
-  if(!r.ok) throw await r.text();
+  if(!r.ok){ var t=await r.text(); throw new Error(t); }
   return r.json();
 }
 async function sbPatch(table,qs,body){
   var r=await fetch(sbU(table)+'?'+qs,{method:'PATCH',headers:sbH(),body:JSON.stringify(body)});
-  if(!r.ok) throw await r.text();
+  if(!r.ok){ var t=await r.text(); throw new Error(t); }
   return r.json();
 }
-async function sbDel(table,qs){
-  var r=await fetch(sbU(table)+'?'+qs,{method:'DELETE',headers:sbH()});
-  if(!r.ok) throw await r.text();
-}
 
-// ══════════════════════════════════════════════════════════════
-//  PASSWORD HASH
-// ══════════════════════════════════════════════════════════════
 async function hashPw(pw){
   var buf=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(pw));
-  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+  return Array.from(new Uint8Array(buf)).map(function(b){return b.toString(16).padStart(2,'0');}).join('');
 }
 
 // ══════════════════════════════════════════════════════════════
-//  CONSTANTS & COLORS
+//  CONSTANTS
 // ══════════════════════════════════════════════════════════════
 var COLORS=['#38bdf8','#4ade80','#f472b6','#fb923c','#a78bfa','#fbbf24','#f87171','#34d399','#e879f9','#22d3ee'];
 var colorIdx=0;
+var GRID=0.00027, MIN_MOVE_M=6, MAX_SPEED_MS=12, GPS_SMOOTH=0.4;
+var ACC_GOOD=25, ACC_OK=60;
+var STEP_THRESH=1.1, STEP_DEBOUNCE=220, STEP_STRIDE_WALK=0.74, STEP_STRIDE_RUN=1.15;
+var LOOP_CLOSE_M=20, MIN_LOOP_POINTS=12, LOOP_MIN_DIST_M=60;
 
-// GPS params
-var GRID=0.00027;          // ~30m grid cells
-var MIN_MOVE_M=6;          // min GPS movement to register (meters)
-var MAX_SPEED_MS=12;       // ~43 km/h — reject GPS jumps above this
-var GPS_SMOOTH=0.4;        // position smoothing factor (0=no change, 1=raw)
-var ACC_GOOD=25, ACC_OK=60; // accuracy thresholds in meters
-
-// Step counting
-var STEP_THRESH=1.1;       // accelerometer peak threshold (m/s²)
-var STEP_DEBOUNCE=220;     // ms between steps
-var STEP_STRIDE_WALK=0.74; // stride length walking (m)
-var STEP_STRIDE_RUN=1.15;  // stride length running (m)
-
-// Loop detection
-var LOOP_CLOSE_M=20;       // meters to "close" a loop
-var MIN_LOOP_POINTS=12;    // minimum trail points before loop can close
-var LOOP_MIN_DIST_M=60;    // minimum path distance before loop detects
+var ACHIEVEMENTS=[
+  {id:'first_loop',icon:'🔁',name:'First Loop',desc:'Complete your first territory loop',check:function(s){return s.loops>=1;}},
+  {id:'speed_demon',icon:'⚡',name:'Speed Demon',desc:'Reach 12+ km/h while tracking',check:function(s){return s.maxSpeed>=12;}},
+  {id:'explorer_1k',icon:'🗺️',name:'Explorer',desc:'Walk 1km in one session',check:function(s){return s.dist>=1000;}},
+  {id:'explorer_5k',icon:'🌍',name:'Marathoner',desc:'Walk 5km in one session',check:function(s){return s.dist>=5000;}},
+  {id:'steps_5k',icon:'👟',name:'5K Steps',desc:'Hit 5,000 steps in a session',check:function(s){return s.steps>=5000;}},
+  {id:'conqueror',icon:'⚔️',name:'Conqueror',desc:'Claim a zone from another player',check:function(s){return s.conquered>=1;}},
+  {id:'big_loop',icon:'🏟️',name:'Big Loop',desc:'Close a loop over 10,000m²',check:function(s){return s.maxLoopArea>=10000;}},
+  {id:'triple_loop',icon:'🔄',name:'Triple Loop',desc:'Complete 3 loops in one session',check:function(s){return s.loops>=3;}},
+];
 
 // ══════════════════════════════════════════════════════════════
-//  APP STATE
+//  STATE
 // ══════════════════════════════════════════════════════════════
 var me=null;
-
-// Session stats (accumulates during current tracking session)
 var session={steps:0,dist:0,cal:0,loops:0,area:0};
-// DB-loaded today stats
 var today_db={steps:0,dist:0,cal:0};
-// Runtime
-var tracking=false, map=null, watchId=null;
+var tracking=false, mapObj=null, watchId=null;
 var lastGPS=null, smoothGPS=null, lastGPSTime=null;
 var gpsLocked=false, firstFix=true;
-var currentSpeedKmh=0, speedSamples=[], avgSpeed=0;
-var trackStart=null, timerIv=null;
-
-// Step counting via accelerometer
-var accel={active:false,avg:0,lastStep:0,sessionSteps:0};
-
-// Trail
-var trailPts=[]; // [[lat,lng],...] current path
-var trailLines=[];  // leaflet polyline refs
-var loopPolygons=[]; // leaflet polygon refs (session, visual only)
-var loopCount=0, totalArea=0;
-var loopHintShown=false, loopHintTimer=null;
-var trailDist=0; // total distance walked this trail segment
-
-// Map markers
-var myMarker=null, otherMarkers={};
-var allPolygonLayers=[]; // all territory polygons on map (loaded from DB)
-
-// Sync
+var currentSpeedKmh=0, speedSamples=[], trackStart=null, timerIv=null;
+var accel={active:false,lastStep:0,sessionSteps:0};
+var motionBuf=[];
+var trailPts=[], trailLines=[], loopPolygons=[];
+var loopCount=0, totalArea=0, loopHintShown=false, loopHintTimer=null, trailDist=0;
+var myMarker=null, allPolyLayers=[];
 var syncIv=null, pollIv=null;
-
-// Achievements
-var ACHIEVEMENTS=[
-  {id:'first_loop',icon:'🔁',name:'First Loop',desc:'Complete your first territory loop',check:function(s){return s.loops>=1}},
-  {id:'speed_demon',icon:'⚡',name:'Speed Demon',desc:'Reach 12+ km/h while tracking',check:function(s){return s.maxSpeed>=12}},
-  {id:'explorer_1k',icon:'🗺️',name:'Explorer',desc:'Walk 1km in one session',check:function(s){return s.dist>=1000}},
-  {id:'explorer_5k',icon:'🌍',name:'Marathoner',desc:'Walk 5km in one session',check:function(s){return s.dist>=5000}},
-  {id:'steps_5k',icon:'👟',name:'5K Steps',desc:'Hit 5,000 steps in a session',check:function(s){return s.steps>=5000}},
-  {id:'conqueror',icon:'⚔️',name:'Conqueror',desc:'Claim a zone from another player',check:function(s){return s.conquered>=1}},
-  {id:'big_loop',icon:'🏟️',name:'Big Loop',desc:'Close a loop over 10,000m²',check:function(s){return s.maxLoopArea>=10000}},
-  {id:'triple_loop',icon:'🔄',name:'Triple Loop',desc:'Complete 3 loops in one session',check:function(s){return s.loops>=3}},
-];
 var sessionAchievements={loops:0,dist:0,steps:0,conquered:0,maxSpeed:0,maxLoopArea:0};
 var unlockedAchievements=new Set();
 var newAchievementsThisSession=[];
 
-function today(){ return new Date().toISOString().slice(0,10); }
+function todayStr(){ return new Date().toISOString().slice(0,10); }
 
 // ══════════════════════════════════════════════════════════════
 //  INIT
@@ -491,13 +423,15 @@ window.onload=async function(){
 };
 
 // ══════════════════════════════════════════════════════════════
-//  AUTH
+//  AUTH — matches schema exactly
+//  users columns: id, username, display, password_hash, color, total_area, created_at
 // ══════════════════════════════════════════════════════════════
 function togglePw(id,btn){
   var i=document.getElementById(id);
   i.type=i.type==='password'?'text':'password';
   btn.textContent=i.type==='password'?'👁':'🙈';
 }
+
 document.getElementById('tLogin').onclick=function(){
   this.className='tab on'; document.getElementById('tRegister').className='tab';
   document.getElementById('pLogin').style.display='block';
@@ -511,7 +445,6 @@ document.getElementById('tRegister').onclick=function(){
   document.getElementById('regErr').textContent='';
 };
 
-// Enter key support
 ['loginUser','loginPass'].forEach(function(id){
   document.getElementById(id).addEventListener('keydown',function(e){ if(e.key==='Enter') document.getElementById('btnLogin').click(); });
 });
@@ -531,8 +464,10 @@ document.getElementById('btnLogin').onclick=async function(){
     var rows=await sbQ('users','select=*&username=eq.'+encodeURIComponent(u)+'&password_hash=eq.'+encodeURIComponent(hash));
     if(!rows.length){ err.textContent='Wrong username or password'; this.textContent='SIGN IN →'; this.disabled=false; return; }
     me=rows[0];
+    // Ensure local achievements set — stored in memory only (no DB column needed)
+    unlockedAchievements=new Set();
     await launch();
-  } catch(e){ err.textContent='Network error, try again'; this.textContent='SIGN IN →'; this.disabled=false; }
+  } catch(e){ err.textContent='Network error, try again'; this.textContent='SIGN IN →'; this.disabled=false; console.error(e); }
 };
 
 document.getElementById('btnCreate').onclick=async function(){
@@ -547,60 +482,65 @@ document.getElementById('btnCreate').onclick=async function(){
   this.textContent='Creating...'; this.disabled=true;
   try{
     var hash=await hashPw(p);
-    var rows=await sbIns('users',{username:u,display:d,password_hash:hash,color:COLORS[colorIdx],achievements:'[]',total_loops:0,total_area:0});
+    // INSERT only columns that actually exist in your users table:
+    // id (auto), username, display, password_hash, color, total_area (default 0), created_at (auto)
+    var rows=await sbIns('users',{
+      username: u,
+      display:  d,
+      password_hash: hash,
+      color:    COLORS[colorIdx],
+      total_area: 0
+    });
     me=rows[0];
+    unlockedAchievements=new Set();
     await launch();
   } catch(e){
-    var msg=String(e);
-    if(msg.includes('unique')||msg.includes('duplicate')) err.textContent='Username already taken';
-    else err.textContent='Error creating account, try again';
+    var msg=String(e.message||e);
+    if(msg.includes('unique')||msg.includes('duplicate')||msg.includes('23505')){
+      err.textContent='Username already taken — try another';
+    } else {
+      err.textContent='Error: '+msg;
+    }
     this.textContent='CREATE ACCOUNT →'; this.disabled=false;
+    console.error('Register error:', e);
   }
 };
 
 // ══════════════════════════════════════════════════════════════
-//  LAUNCH APP
+//  LAUNCH
 // ══════════════════════════════════════════════════════════════
 async function launch(){
   document.getElementById('auth').style.display='none';
   document.getElementById('app').style.display='flex';
 
-  // Reset all state
   session={steps:0,dist:0,cal:0,loops:0,area:0};
   sessionAchievements={loops:0,dist:0,steps:0,conquered:0,maxSpeed:0,maxLoopArea:0};
   newAchievementsThisSession=[];
   trailPts=[]; loopCount=0; totalArea=0; trailDist=0;
   loopHintShown=false; speedSamples=[];
 
-  // Load user's unlocked achievements
-  try{
-    var ach=JSON.parse(me.achievements||'[]');
-    unlockedAchievements=new Set(ach);
-  } catch(e){ unlockedAchievements=new Set(); }
-
   updateHeader();
-  if(!map) initMap();
+  if(!mapObj) initMap();
 
   setSyncStatus('live','LOADING...');
   await loadTodayStats();
-  await loadAndRenderAllTerritory(); // load ALL players' territory from DB
+  await loadAndRenderTerritory();
   await loadLeaderboard();
   await loadHistory();
   renderAchievements();
 
-  pollIv=setInterval(function(){ loadAndRenderAllTerritory(); loadLeaderboard(); },20000);
+  pollIv=setInterval(function(){ loadAndRenderTerritory(); loadLeaderboard(); },20000);
   syncIv=setInterval(flushStats,30000);
   setSyncStatus('ok','SYNCED');
 }
 
 // ══════════════════════════════════════════════════════════════
-//  MAP INIT
+//  MAP
 // ══════════════════════════════════════════════════════════════
 function initMap(){
-  map=L.map('map',{zoomControl:true,attributionControl:false}).setView([20,0],3);
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{maxZoom:19,subdomains:'abcd'}).addTo(map);
-  // Tap to manually set position
-  map.on('click',function(e){
+  mapObj=L.map('map',{zoomControl:true,attributionControl:false}).setView([20,0],3);
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{maxZoom:19,subdomains:'abcd'}).addTo(mapObj);
+  mapObj.on('click',function(e){
     if(!me||!tracking) return;
     var lat=e.latlng.lat, lng=e.latlng.lng;
     smoothGPS={lat:lat,lng:lng};
@@ -612,25 +552,22 @@ function initMap(){
 }
 
 // ══════════════════════════════════════════════════════════════
-//  TERRITORY: LOAD & RENDER FROM DB (PERSISTENT POLYGONS)
+//  TERRITORY RENDER
+//  territories columns: id, owner_id(text), owner_username, owner_display, owner_color, geojson, area_m2, created_at
 // ══════════════════════════════════════════════════════════════
-async function loadAndRenderAllTerritory(){
+async function loadAndRenderTerritory(){
   try{
-    // territories table stores polygons: id, owner_id, owner_display, owner_color, geojson (polygon coords), area_m2, created_at
     var rows=await sbQ('territories','select=*&order=created_at.asc');
-    // Remove old polygon layers
-    allPolygonLayers.forEach(function(l){ map.removeLayer(l); });
-    allPolygonLayers=[];
-    rows.forEach(function(r){
-      renderDBPolygon(r);
-    });
-    updateZoneCount(rows);
+    allPolyLayers.forEach(function(l){ mapObj.removeLayer(l); });
+    allPolyLayers=[];
+    rows.forEach(function(r){ renderPoly(r); });
+    updateMyZoneCount(rows);
   } catch(e){ console.warn('loadTerritory',e); }
 }
 
-function renderDBPolygon(row){
+function renderPoly(row){
   try{
-    var coords=JSON.parse(row.geojson||'[]'); // [[lat,lng],...]
+    var coords=JSON.parse(row.geojson||'[]');
     if(coords.length<3) return;
     var c=row.owner_color||'#38bdf8';
     var isMe=(me&&row.owner_id===me.id);
@@ -640,113 +577,77 @@ function renderDBPolygon(row){
       fillColor:c,
       fillOpacity:isMe?0.2:0.13,
       interactive:true
-    });
-    poly.bindTooltip(row.owner_display,{
-      permanent:false, direction:'center',
-      className:'',
-      opacity:0.9
-    });
-    poly.addTo(map);
-
-    // Name label at centroid
-    var cen=polygonCentroid(coords);
+    }).addTo(mapObj);
+    poly.bindTooltip(row.owner_display,{permanent:false,direction:'center',opacity:0.9});
+    var cen=polyCentroid(coords);
     var lbl=L.divIcon({
       html:'<div style="font-family:Syne,sans-serif;font-size:10px;font-weight:800;color:'+c+';text-shadow:0 0 6px '+c+',0 0 12px '+c+'80;white-space:nowrap;letter-spacing:0.5px;pointer-events:none;opacity:0.85">'+row.owner_display+'</div>',
       className:'',iconAnchor:[40,8]
     });
-    var lm=L.marker([cen.lat,cen.lng],{icon:lbl,interactive:false,zIndexOffset:-100}).addTo(map);
-
-    allPolygonLayers.push(poly);
-    allPolygonLayers.push(lm);
-  } catch(err){ console.warn('renderDBPolygon',err); }
+    var lm=L.marker([cen.lat,cen.lng],{icon:lbl,interactive:false,zIndexOffset:-100}).addTo(mapObj);
+    allPolyLayers.push(poly);
+    allPolyLayers.push(lm);
+  } catch(err){ console.warn('renderPoly',err); }
 }
 
-function updateZoneCount(rows){
+function updateMyZoneCount(rows){
   if(!me) return;
   var mine=rows.filter(function(r){ return r.owner_id===me.id; });
   document.getElementById('sZones').textContent=mine.length;
 }
 
 // ══════════════════════════════════════════════════════════════
-//  STEP COUNTING — DUAL MODE
+//  ACCELEROMETER STEP COUNTING
 // ══════════════════════════════════════════════════════════════
-/*
-  PRIMARY: DeviceMotion accelerometer
-  - Measures magnitude of acceleration minus gravity
-  - Peak detection with debounce
-  - Much more accurate than GPS on mobile
-  
-  FALLBACK: GPS stride estimation
-  - Only when no accelerometer available
-  - Uses speed-dependent stride length
-*/
 function startAccelerometer(){
-  accel={active:false,avg:0,lastStep:0,sessionSteps:0};
-  if(typeof DeviceMotionEvent==='undefined'){ console.log('No accelerometer'); return; }
+  accel={active:false,lastStep:0,sessionSteps:0};
+  motionBuf=[];
+  if(typeof DeviceMotionEvent==='undefined') return;
   function attach(){
     accel.active=true;
     window.addEventListener('devicemotion',onMotion,{passive:true});
-    toast('📲 Accelerometer active');
   }
   if(typeof DeviceMotionEvent.requestPermission==='function'){
-    DeviceMotionEvent.requestPermission().then(function(s){
-      if(s==='granted') attach();
-    }).catch(function(){});
+    DeviceMotionEvent.requestPermission().then(function(s){ if(s==='granted') attach(); }).catch(function(){});
   } else { attach(); }
 }
 function stopAccelerometer(){
   window.removeEventListener('devicemotion',onMotion);
   accel.active=false;
 }
-
-// Sliding window for baseline + peak detection
-var motionBuf=[];
 function onMotion(e){
   if(!tracking) return;
   var ag=e.accelerationIncludingGravity;
   if(!ag||ag.x==null) return;
-
-  // Magnitude of total acceleration
   var mag=Math.sqrt(ag.x*ag.x+ag.y*ag.y+ag.z*ag.z);
-
-  // Keep rolling buffer of last 20 samples for baseline
   motionBuf.push(mag);
   if(motionBuf.length>20) motionBuf.shift();
-
-  // Baseline = average of buffer
   var baseline=motionBuf.reduce(function(a,b){return a+b;},0)/motionBuf.length;
-
-  // Peak above baseline
   var peak=mag-baseline;
   var now=Date.now();
-
-  if(peak>STEP_THRESH && (now-accel.lastStep)>STEP_DEBOUNCE){
+  if(peak>STEP_THRESH&&(now-accel.lastStep)>STEP_DEBOUNCE){
     accel.lastStep=now;
     accel.sessionSteps++;
     session.steps++;
     refreshStats();
   }
 }
-
 function gpsSteps(distM){
-  // Fallback: estimate steps from distance only
   var stride=(currentSpeedKmh>9)?STEP_STRIDE_RUN:STEP_STRIDE_WALK;
   return Math.round(distM/stride);
 }
 
 // ══════════════════════════════════════════════════════════════
-//  GPS TRACKING — ACCURATE POSITION FILTERING
+//  GPS TRACKING
 // ══════════════════════════════════════════════════════════════
 document.getElementById('btnTrack').onclick=function(){
-  if(tracking) stopTracking();
-  else startTracking();
+  if(tracking) stopTracking(); else startTracking();
 };
 
 function startTracking(){
   if(!navigator.geolocation){ toast('Geolocation not available'); return; }
   var btn=document.getElementById('btnTrack');
   btn.textContent='🛰 Locating...'; btn.disabled=true;
-
   smoothGPS=null; lastGPS=null; lastGPSTime=null;
   gpsLocked=false; firstFix=true;
   trailPts=[]; trailDist=0; loopCount=0; totalArea=0;
@@ -755,10 +656,7 @@ function startTracking(){
   session={steps:0,dist:0,cal:0,loops:0,area:0};
   sessionAchievements={loops:0,dist:0,steps:0,conquered:0,maxSpeed:0,maxLoopArea:0};
   newAchievementsThisSession=[];
-
-  // Clear previous visual trail (not DB polygons)
   clearTrailVisuals();
-
   setBadge('weak','LOCATING...');
   startAccelerometer();
   trackStart=Date.now();
@@ -766,11 +664,7 @@ function startTracking(){
   document.getElementById('trail-hud').style.display='block';
   document.getElementById('speed-hud').style.display='block';
   document.getElementById('btnClearTrail').style.display='flex';
-
-  watchId=navigator.geolocation.watchPosition(
-    onGPS, onGPSErr,
-    {enableHighAccuracy:true, maximumAge:1000, timeout:20000}
-  );
+  watchId=navigator.geolocation.watchPosition(onGPS,onGPSErr,{enableHighAccuracy:true,maximumAge:1000,timeout:20000});
 }
 
 function stopTracking(){
@@ -785,28 +679,18 @@ function stopTracking(){
   var btn=document.getElementById('btnTrack');
   btn.className='mb go'; btn.textContent='▶ START'; btn.disabled=false;
   setBadge('','IDLE');
-
-  // Check achievements
   checkAchievements();
-
-  // Flush stats then show summary
-  flushStats().then(function(){
-    showSummary();
-  });
+  flushStats().then(function(){ showSummary(); });
 }
 
 function onGPS(pos){
   var acc=pos.coords.accuracy;
   var rlat=pos.coords.latitude, rlng=pos.coords.longitude;
-  var gspd=pos.coords.speed; // m/s, may be null
+  var gspd=pos.coords.speed;
   var now=pos.timestamp||Date.now();
-
-  // Update GPS badge
   if(acc<=ACC_GOOD){ gpsLocked=true; setBadge('live','±'+Math.round(acc)+'m'); }
   else if(acc<=ACC_OK){ setBadge('weak','±'+Math.round(acc)+'m'); }
   else{ setBadge('weak','⚠±'+Math.round(acc)+'m'); }
-
-  // First fix — start tracking
   if(firstFix){
     firstFix=false; tracking=true;
     var btn=document.getElementById('btnTrack');
@@ -814,58 +698,40 @@ function onGPS(pos){
     smoothGPS={lat:rlat,lng:rlng};
     lastGPS={lat:rlat,lng:rlng}; lastGPSTime=now;
     placeMyMarker(rlat,rlng);
-    map.setView([rlat,rlng],17);
+    mapObj.setView([rlat,rlng],17);
     return;
   }
-
-  // Reject terrible accuracy (unless we have no other option for a while)
   if(acc>ACC_OK*2) return;
-
-  // Speed sanity filter — reject GPS teleport jumps
   if(lastGPS&&lastGPSTime){
     var dtSec=(now-lastGPSTime)/1000;
     if(dtSec>0){
       var rawDist=haversine(lastGPS.lat,lastGPS.lng,rlat,rlng);
-      var impliedSpd=rawDist/dtSec; // m/s
-      if(impliedSpd>MAX_SPEED_MS){ return; } // GPS jump, ignore
+      if(rawDist/dtSec>MAX_SPEED_MS) return;
     }
   }
-
-  // Exponential smoothing of position
   if(!smoothGPS) smoothGPS={lat:rlat,lng:rlng};
   else{
-    // Use more smoothing for bad accuracy, less for good
-    var alpha=acc<=ACC_GOOD?GPS_SMOOTH:(GPS_SMOOTH*0.5);
+    var alpha=acc<=ACC_GOOD?GPS_SMOOTH:GPS_SMOOTH*0.5;
     smoothGPS.lat+=alpha*(rlat-smoothGPS.lat);
     smoothGPS.lng+=alpha*(rlng-smoothGPS.lng);
   }
-
-  // Speed calculation
   if(lastGPS&&lastGPSTime){
     var dt2=(now-lastGPSTime)/1000;
     if(dt2>0){
       var d=haversine(lastGPS.lat,lastGPS.lng,smoothGPS.lat,smoothGPS.lng);
-      var spd=d/dt2; // m/s
-      // Prefer GPS-provided speed if available and reasonable
-      if(gspd!=null&&gspd>=0&&gspd<MAX_SPEED_MS) spd=gspd;
+      var spd=(gspd!=null&&gspd>=0&&gspd<MAX_SPEED_MS)?gspd:(d/dt2);
       currentSpeedKmh=spd*3.6;
       speedSamples.push(currentSpeedKmh);
       if(speedSamples.length>30) speedSamples.shift();
       if(currentSpeedKmh>sessionAchievements.maxSpeed) sessionAchievements.maxSpeed=currentSpeedKmh;
     }
   }
-
-  lastGPS={lat:smoothGPS.lat,lng:smoothGPS.lng};
-  lastGPSTime=now;
-
+  lastGPS={lat:smoothGPS.lat,lng:smoothGPS.lng}; lastGPSTime=now;
   placeMyMarker(smoothGPS.lat,smoothGPS.lng);
-
-  // Only register movement if moved enough (filters GPS noise while standing still)
   var moveDist=trailPts.length>0?haversine(smoothGPS.lat,smoothGPS.lng,trailPts[trailPts.length-1][0],trailPts[trailPts.length-1][1]):999;
   if(moveDist<MIN_MOVE_M) return;
-
   onValidPos(smoothGPS.lat,smoothGPS.lng,now);
-  map.panTo([smoothGPS.lat,smoothGPS.lng],{animate:true,duration:1});
+  mapObj.panTo([smoothGPS.lat,smoothGPS.lng],{animate:true,duration:1});
 }
 
 function onGPSErr(err){
@@ -879,60 +745,46 @@ function onGPSErr(err){
 function onValidPos(lat,lng,ts){
   var prev=trailPts.length>0?trailPts[trailPts.length-1]:null;
   var dist=prev?haversine(lat,lng,prev[0],prev[1]):0;
-
-  // Update stats
   if(prev){
     trailDist+=dist;
     session.dist+=dist;
-    session.cal+=(dist/1000)*62; // ~62 kcal/km average
-    if(!accel.active){
-      session.steps+=gpsSteps(dist);
-    }
+    session.cal+=(dist/1000)*62;
+    if(!accel.active) session.steps+=gpsSteps(dist);
     sessionAchievements.dist=session.dist;
     sessionAchievements.steps=session.steps;
   }
-
   trailPts.push([lat,lng]);
   drawTrailSegment();
   checkLoopClose(lat,lng);
-  claimGridZone(Math.floor(lat/GRID)*GRID, Math.floor(lng/GRID)*GRID);
   refreshStats();
 }
 
 // ══════════════════════════════════════════════════════════════
-//  TRAIL DRAWING  (glowy layered polyline)
+//  TRAIL DRAWING
 // ══════════════════════════════════════════════════════════════
 function clearTrailVisuals(){
-  trailLines.forEach(function(l){ if(map) map.removeLayer(l); });
+  trailLines.forEach(function(l){ if(mapObj) mapObj.removeLayer(l); });
   trailLines=[];
-  loopPolygons.forEach(function(p){ if(map) map.removeLayer(p); });
+  loopPolygons.forEach(function(p){ if(mapObj) mapObj.removeLayer(p); });
   loopPolygons=[];
 }
-
 function drawTrailSegment(){
   if(trailPts.length<2) return;
-  // Remove and redraw (efficient enough for typical trail lengths)
-  trailLines.forEach(function(l){ map.removeLayer(l); });
+  trailLines.forEach(function(l){ mapObj.removeLayer(l); });
   trailLines=[];
   var c=me.color;
-  // Outer glow
-  trailLines.push(L.polyline(trailPts,{color:c,weight:22,opacity:0.05,lineCap:'round',lineJoin:'round'}).addTo(map));
-  trailLines.push(L.polyline(trailPts,{color:c,weight:12,opacity:0.1,lineCap:'round',lineJoin:'round'}).addTo(map));
-  // Solid core
-  trailLines.push(L.polyline(trailPts,{color:c,weight:3.5,opacity:0.95,lineCap:'round',lineJoin:'round'}).addTo(map));
-  // Bright leading dot — pulsing dot at last point
+  trailLines.push(L.polyline(trailPts,{color:c,weight:22,opacity:0.05,lineCap:'round',lineJoin:'round'}).addTo(mapObj));
+  trailLines.push(L.polyline(trailPts,{color:c,weight:12,opacity:0.1,lineCap:'round',lineJoin:'round'}).addTo(mapObj));
+  trailLines.push(L.polyline(trailPts,{color:c,weight:3.5,opacity:0.95,lineCap:'round',lineJoin:'round'}).addTo(mapObj));
   var last=trailPts[trailPts.length-1];
-  trailLines.push(L.circleMarker(last,{radius:6,color:c,fillColor:c,fillOpacity:1,weight:2,opacity:0.9}).addTo(map));
+  trailLines.push(L.circleMarker(last,{radius:6,color:c,fillColor:c,fillOpacity:1,weight:2,opacity:0.9}).addTo(mapObj));
 }
 
 // ══════════════════════════════════════════════════════════════
 //  LOOP DETECTION
 // ══════════════════════════════════════════════════════════════
 function checkLoopClose(lat,lng){
-  if(trailPts.length<MIN_LOOP_POINTS) return;
-  if(trailDist<LOOP_MIN_DIST_M) return;
-
-  // Show hint after enough distance
+  if(trailPts.length<MIN_LOOP_POINTS||trailDist<LOOP_MIN_DIST_M) return;
   if(trailDist>80&&!loopHintShown){
     loopHintShown=true;
     var h=document.getElementById('loop-hint');
@@ -940,80 +792,61 @@ function checkLoopClose(lat,lng){
     clearTimeout(loopHintTimer);
     loopHintTimer=setTimeout(function(){ h.style.display='none'; },6000);
   }
-
-  // Check if current pos is close to trail start
   var start=trailPts[0];
-  var distToStart=haversine(lat,lng,start[0],start[1]);
-  if(distToStart<LOOP_CLOSE_M){
-    closeFullLoop();
-    return;
-  }
-
-  // Check if close to any earlier segment (sub-loop detection)
-  // Only check points older than MIN_LOOP_POINTS from end
+  if(haversine(lat,lng,start[0],start[1])<LOOP_CLOSE_M){ closeFullLoop(); return; }
   var limit=trailPts.length-MIN_LOOP_POINTS;
   for(var i=0;i<Math.min(limit,trailPts.length-1);i++){
     if(haversine(lat,lng,trailPts[i][0],trailPts[i][1])<LOOP_CLOSE_M){
-      // Close sub-loop from index i
-      var sub=trailPts.slice(i);
-      sub.push([lat,lng]);
+      var sub=trailPts.slice(i); sub.push([lat,lng]);
       commitLoop(sub);
-      // Keep trail but mark new start from current pos
-      trailPts=[[lat,lng]];
-      trailDist=0; loopHintShown=false;
+      trailPts=[[lat,lng]]; trailDist=0; loopHintShown=false;
       break;
     }
   }
 }
-
 function closeFullLoop(){
-  var coords=trailPts.slice();
-  coords.push(trailPts[0]); // close
+  var coords=trailPts.slice(); coords.push(trailPts[0]);
   commitLoop(coords);
-  // Reset trail from current position
   trailPts=[[trailPts[trailPts.length-1][0],trailPts[trailPts.length-1][1]]];
   trailDist=0; loopHintShown=false;
   document.getElementById('loop-hint').style.display='none';
 }
 
 async function commitLoop(coords){
-  var area=polygonArea(coords);
-  if(area<50) return; // too tiny, ignore noise loops
-  loopCount++;
-  totalArea+=area;
-  session.loops++;
-  session.area+=area;
+  var area=polyArea(coords);
+  if(area<50) return;
+  loopCount++; totalArea+=area;
+  session.loops++; session.area+=area;
   sessionAchievements.loops++;
   if(area>sessionAchievements.maxLoopArea) sessionAchievements.maxLoopArea=area;
-
-  // Draw loop polygon visually
   var c=me.color;
-  var poly=L.polygon(coords,{color:c,weight:2,opacity:0.85,fillColor:c,fillOpacity:0.22}).addTo(map);
+  var poly=L.polygon(coords,{color:c,weight:2,opacity:0.85,fillColor:c,fillOpacity:0.22}).addTo(mapObj);
   loopPolygons.push(poly);
-
-  // Name label
-  var cen=polygonCentroid(coords);
+  var cen=polyCentroid(coords);
   var lbl=L.divIcon({
     html:'<div style="font-family:Syne,sans-serif;font-size:11px;font-weight:800;color:'+c+';text-shadow:0 0 8px '+c+',0 0 16px '+c+'80;white-space:nowrap;pointer-events:none">'+me.display+'</div>',
     className:'',iconAnchor:[40,8]
   });
-  var lm=L.marker([cen.lat,cen.lng],{icon:lbl,interactive:false}).addTo(map);
+  var lm=L.marker([cen.lat,cen.lng],{icon:lbl,interactive:false}).addTo(mapObj);
   loopPolygons.push(lm);
 
-  // PERSIST POLYGON TO DB
+  // SAVE TO DB — only columns that exist: owner_id(text), owner_username, owner_display, owner_color, geojson, area_m2
   try{
     await sbIns('territories',{
-      owner_id:me.id,
-      owner_username:me.username,
-      owner_display:me.display,
-      owner_color:me.color,
-      geojson:JSON.stringify(coords),
-      area_m2:Math.round(area),
-      created_at:new Date().toISOString()
+      owner_id:       me.id,          // uuid stored as text in your schema
+      owner_username: me.username,
+      owner_display:  me.display,
+      owner_color:    me.color,
+      geojson:        JSON.stringify(coords),
+      area_m2:        Math.round(area)
     });
+    // Update user's total_area (bigint)
+    await sbPatch('users','id=eq.'+me.id,{
+      total_area: (me.total_area||0) + Math.round(area)
+    });
+    me.total_area=(me.total_area||0)+Math.round(area);
   } catch(e){ console.warn('save territory',e); }
 
-  // Celebrate
   celebrateLoop(area);
   document.getElementById('hudLoops').textContent=loopCount;
   document.getElementById('sLoops').textContent=loopCount;
@@ -1022,72 +855,50 @@ async function commitLoop(coords){
 
 function celebrateLoop(area){
   var el=document.createElement('div');
-  el.className='loop-pop';
-  el.style.color=me.color;
-  el.innerHTML='<div class="lp-title">🎉 LOOP CLOSED!</div>'
-    +'<div class="lp-sub">+'+fmtArea(area)+' TERRITORY CLAIMED</div>';
+  el.className='loop-pop'; el.style.color=me.color;
+  el.innerHTML='<div class="lp-title">🎉 LOOP CLOSED!</div>'+'<div class="lp-sub">+'+fmtArea(area)+' TERRITORY CLAIMED</div>';
   document.body.appendChild(el);
   setTimeout(function(){ el.remove(); },3000);
   toast('🗺 Loop closed! +'+fmtArea(area));
 }
 
 // ══════════════════════════════════════════════════════════════
-//  ZONE CLAIMING (grid cells)
-// ══════════════════════════════════════════════════════════════
-var pendingZones={}; // debounce repeated claims of same cell
-async function claimGridZone(lat,lng){
-  var key=lat.toFixed(6)+','+lng.toFixed(6);
-  if(pendingZones[key]) return;
-  pendingZones[key]=true;
-  setTimeout(function(){ delete pendingZones[key]; },5000);
-  try{
-    // Check if this zone is owned by someone else (conquest)
-    var existing=await sbQ('zones','select=*&grid_key=eq.'+encodeURIComponent(key));
-    if(existing.length&&existing[0].owner_id!==me.id){
-      showConquest('⚔️ Conquered!');
-      sessionAchievements.conquered++;
-    }
-    await sbUps('zones',{
-      grid_key:key,lat:lat,lng:lng,
-      owner_id:me.id,owner_username:me.username,
-      owner_display:me.display,owner_color:me.color,
-      intensity:1,updated_at:new Date().toISOString()
-    },'grid_key');
-  } catch(e){ console.warn('claimZone',e); }
-}
-
-// ══════════════════════════════════════════════════════════════
-//  DB: STATS
+//  DB STATS
+//  daily_stats columns: id(auto), user_id(text), date, steps, distance_m, calories
 // ══════════════════════════════════════════════════════════════
 async function loadTodayStats(){
   try{
-    var rows=await sbQ('daily_stats','select=*&user_id=eq.'+me.id+'&date=eq.'+today());
-    if(rows.length) today_db={steps:rows[0].steps||0,dist:rows[0].distance_m||0,cal:rows[0].calories||0};
-    else today_db={steps:0,dist:0,cal:0};
+    // user_id is text in your schema — pass me.id directly (it's a uuid string)
+    var rows=await sbQ('daily_stats','select=*&user_id=eq.'+encodeURIComponent(me.id)+'&date=eq.'+todayStr());
+    if(rows.length){
+      today_db={steps:rows[0].steps||0,dist:+rows[0].distance_m||0,cal:+rows[0].calories||0};
+    } else {
+      today_db={steps:0,dist:0,cal:0};
+    }
     refreshStats();
-  } catch(e){}
+  } catch(e){ console.warn('loadTodayStats',e); }
 }
 
 async function flushStats(){
   if(session.steps===0&&session.dist<1) return;
   setSyncStatus('live','SYNCING...');
   try{
-    var rows=await sbQ('daily_stats','select=id,steps,distance_m,calories&user_id=eq.'+me.id+'&date=eq.'+today());
     var ns=Math.round(today_db.steps+session.steps);
     var nd=today_db.dist+session.dist;
     var nc=Math.round(today_db.cal+session.cal);
+    var rows=await sbQ('daily_stats','select=id&user_id=eq.'+encodeURIComponent(me.id)+'&date=eq.'+todayStr());
     if(rows.length){
       await sbPatch('daily_stats','id=eq.'+rows[0].id,{steps:ns,distance_m:nd,calories:nc});
     } else {
-      await sbUps('daily_stats',{user_id:me.id,date:today(),steps:ns,distance_m:nd,calories:nc},'user_id,date');
+      // Insert — user_id is text, date is date, rest numeric
+      await sbUps('daily_stats',{
+        user_id:    me.id,
+        date:       todayStr(),
+        steps:      ns,
+        distance_m: nd,
+        calories:   nc
+      },'user_id,date');
     }
-    // Update user's total stats
-    await sbPatch('users','id=eq.'+me.id,{
-      total_loops:(me.total_loops||0)+session.loops,
-      total_area:(me.total_area||0)+Math.round(session.area)
-    });
-    me.total_loops=(me.total_loops||0)+session.loops;
-    me.total_area=(me.total_area||0)+Math.round(session.area);
     today_db={steps:ns,dist:nd,cal:nc};
     session={steps:0,dist:0,cal:0,loops:0,area:0};
     await loadHistory();
@@ -1097,18 +908,20 @@ async function flushStats(){
 
 async function loadLeaderboard(){
   try{
-    // Count territories per user + sum area
     var rows=await sbQ('territories','select=owner_id,owner_display,owner_color,area_m2');
-    var map2={};
+    var byOwner={};
     rows.forEach(function(r){
-      if(!map2[r.owner_id]) map2[r.owner_id]={display:r.owner_display,color:r.owner_color,loops:0,area:0};
-      map2[r.owner_id].loops++;
-      map2[r.owner_id].area+=r.area_m2||0;
+      if(!byOwner[r.owner_id]) byOwner[r.owner_id]={display:r.owner_display,color:r.owner_color,loops:0,area:0};
+      byOwner[r.owner_id].loops++;
+      byOwner[r.owner_id].area+=(r.area_m2||0);
     });
-    var sorted=Object.values(map2).sort(function(a,b){ return b.area-a.area; });
+    var sorted=Object.values(byOwner).sort(function(a,b){ return b.area-a.area; });
     var medals=['🥇','🥈','🥉'];
     var el=document.getElementById('lb'); el.innerHTML='';
-    if(!sorted.length){ el.innerHTML='<div style="text-align:center;color:#374151;font-family:\'JetBrains Mono\',monospace;font-size:11px;padding:16px">No territory claimed yet</div>'; return; }
+    if(!sorted.length){
+      el.innerHTML='<div style="text-align:center;color:#374151;font-family:\'JetBrains Mono\',monospace;font-size:11px;padding:16px">No territory yet — start walking!</div>';
+      return;
+    }
     sorted.slice(0,10).forEach(function(u,i){
       var isMe=me&&u.display===me.display;
       var row=document.createElement('div');
@@ -1119,21 +932,23 @@ async function loadLeaderboard(){
         +'<span class="lbarea">'+fmtArea(u.area)+'</span>';
       el.appendChild(row);
     });
-    // Territory % for me
     var total=sorted.reduce(function(s,r){return s+r.area;},0);
-    var mine=map2[me&&me.id]?map2[me.id].area:0;
+    var mine=byOwner[me&&me.id]?byOwner[me.id].area:0;
     var pct=total>0?(mine/total*100):0;
     document.getElementById('sPct').textContent=pct.toFixed(1)+'%';
     document.getElementById('sBar').style.width=Math.min(100,pct)+'%';
-    document.getElementById('sZones').textContent=map2[me&&me.id]?map2[me.id].loops:0;
+    document.getElementById('sZones').textContent=byOwner[me&&me.id]?byOwner[me.id].loops:0;
   } catch(e){ console.warn('lb',e); }
 }
 
 async function loadHistory(){
   try{
-    var rows=await sbQ('daily_stats','select=date,steps,distance_m,calories&user_id=eq.'+me.id+'&order=date.desc&limit=7');
+    var rows=await sbQ('daily_stats','select=date,steps,distance_m,calories&user_id=eq.'+encodeURIComponent(me.id)+'&order=date.desc&limit=7');
     var el=document.getElementById('histList'); el.innerHTML='';
-    if(!rows.length){ el.innerHTML='<div style="text-align:center;color:#374151;font-family:\'JetBrains Mono\',monospace;font-size:11px;padding:12px">No history yet — start tracking!</div>'; return; }
+    if(!rows.length){
+      el.innerHTML='<div style="text-align:center;color:#374151;font-family:\'JetBrains Mono\',monospace;font-size:11px;padding:12px">No history yet</div>';
+      return;
+    }
     rows.forEach(function(r){
       var row=document.createElement('div'); row.className='hist-row';
       var dist=r.distance_m>=1000?((r.distance_m/1000).toFixed(1)+'km'):(Math.round(r.distance_m)+'m');
@@ -1141,28 +956,21 @@ async function loadHistory(){
         +'<div class="hist-vals"><span>'+Math.round(r.steps).toLocaleString()+'👟</span><span>'+dist+'</span><span>'+Math.round(r.calories)+'🔥</span></div>';
       el.appendChild(row);
     });
-  } catch(e){}
+  } catch(e){ console.warn('history',e); }
 }
 
 // ══════════════════════════════════════════════════════════════
-//  ACHIEVEMENTS
+//  ACHIEVEMENTS (in-memory, no DB column needed)
 // ══════════════════════════════════════════════════════════════
 function checkAchievements(){
-  var newOnes=[];
   ACHIEVEMENTS.forEach(function(a){
     if(!unlockedAchievements.has(a.id)&&a.check(sessionAchievements)){
       unlockedAchievements.add(a.id);
-      newOnes.push(a);
       newAchievementsThisSession.push(a);
     }
   });
-  if(newOnes.length){
-    // Save to DB
-    try{ sbPatch('users','id=eq.'+me.id,{achievements:JSON.stringify(Array.from(unlockedAchievements))}); } catch(e){}
-  }
   renderAchievements();
 }
-
 function renderAchievements(){
   var el=document.getElementById('achList'); el.innerHTML='';
   ACHIEVEMENTS.forEach(function(a){
@@ -1177,19 +985,18 @@ function renderAchievements(){
 }
 
 // ══════════════════════════════════════════════════════════════
-//  SESSION SUMMARY MODAL
+//  SUMMARY MODAL
 // ══════════════════════════════════════════════════════════════
 function showSummary(){
   var dur=Math.floor((Date.now()-trackStart)/1000);
-  var mm=Math.floor(dur/60),ss=dur%60;
+  var mm=Math.floor(dur/60), ss=dur%60;
   document.getElementById('sumDate').textContent=new Date().toLocaleDateString('en',{weekday:'long',month:'short',day:'numeric'}).toUpperCase();
-  document.getElementById('sumSteps').textContent=(today_db.steps).toLocaleString();
+  document.getElementById('sumSteps').textContent=today_db.steps.toLocaleString();
   document.getElementById('sumDist').textContent=today_db.dist>=1000?((today_db.dist/1000).toFixed(2)+'km'):(Math.round(today_db.dist)+'m');
   document.getElementById('sumCal').textContent=Math.round(today_db.cal);
   document.getElementById('sumTime').textContent=mm+':'+(ss<10?'0':'')+ss;
   document.getElementById('sumLoops').textContent=loopCount;
   document.getElementById('sumArea').textContent=fmtArea(totalArea);
-  // Achievements
   if(newAchievementsThisSession.length){
     document.getElementById('sumAch').style.display='block';
     document.getElementById('sumAchList').innerHTML=newAchievementsThisSession.map(function(a){
@@ -1202,8 +1009,7 @@ document.getElementById('btnSumClose').onclick=function(){
   document.getElementById('summary-modal').classList.remove('open');
   newAchievementsThisSession=[];
   document.getElementById('sumAch').style.display='none';
-  loadLeaderboard();
-  loadAndRenderAllTerritory();
+  loadLeaderboard(); loadAndRenderTerritory();
 };
 
 // ══════════════════════════════════════════════════════════════
@@ -1215,7 +1021,6 @@ function tickHUD(){
   var mm=Math.floor(elapsed/60), ss=elapsed%60;
   document.getElementById('hudTime').textContent=(mm<10?'0':'')+mm+':'+(ss<10?'0':'')+ss;
   var avg=speedSamples.length?speedSamples.reduce(function(a,b){return a+b;})/speedSamples.length:0;
-  avgSpeed=avg;
   document.getElementById('speedVal').textContent=avg.toFixed(1);
   document.getElementById('sSpeed').textContent=avg.toFixed(1);
   if(avg>0.8){
@@ -1223,10 +1028,8 @@ function tickHUD(){
     var pm=Math.floor(pskm/60), ps=Math.round(pskm%60);
     document.getElementById('hudPace').textContent=pm+"'"+(ps<10?'0':'')+ps+'"';
   }
-  // Cadence
   if(accel.active&&elapsed>10){
-    var spm=Math.round(session.steps/(elapsed/60));
-    document.getElementById('cadenceVal').textContent=spm+' spm';
+    document.getElementById('cadenceVal').textContent=Math.round(session.steps/(elapsed/60))+' spm';
   } else {
     document.getElementById('cadenceVal').textContent=accel.active?'—':'GPS mode';
   }
@@ -1238,28 +1041,25 @@ function tickHUD(){
 //  MARKERS
 // ══════════════════════════════════════════════════════════════
 function placeMyMarker(lat,lng){
-  if(!me||!map) return;
+  if(!me||!mapObj) return;
   if(!myMarker){
     var ic=L.divIcon({
-      html:'<div style="width:20px;height:20px;border-radius:50%;background:'+me.color+';border:3px solid rgba(255,255,255,0.95);box-shadow:0 0 20px '+me.color+',0 0 40px '+me.color+'60;position:relative">'
-        +'<div style="position:absolute;top:-8px;left:-8px;right:-8px;bottom:-8px;border-radius:50%;border:2px solid '+me.color+'50;animation:gp 1.5s ease-in-out infinite;pointer-events:none"></div>'
-        +'</div>',
+      html:'<div style="width:20px;height:20px;border-radius:50%;background:'+me.color+';border:3px solid rgba(255,255,255,0.95);box-shadow:0 0 20px '+me.color+',0 0 40px '+me.color+'60;"></div>',
       className:'',iconSize:[20,20],iconAnchor:[10,10]
     });
-    myMarker=L.marker([lat,lng],{icon:ic,zIndexOffset:1000}).addTo(map);
+    myMarker=L.marker([lat,lng],{icon:ic,zIndexOffset:1000}).addTo(mapObj);
   } else myMarker.setLatLng([lat,lng]);
 }
 
 // ══════════════════════════════════════════════════════════════
-//  MATH HELPERS
+//  MATH
 // ══════════════════════════════════════════════════════════════
 function haversine(a,b,c,d){
   var R=6371000,dL=(c-a)*Math.PI/180,dG=(d-b)*Math.PI/180;
   var x=Math.sin(dL/2)*Math.sin(dL/2)+Math.cos(a*Math.PI/180)*Math.cos(c*Math.PI/180)*Math.sin(dG/2)*Math.sin(dG/2);
   return R*2*Math.atan2(Math.sqrt(x),Math.sqrt(1-x));
 }
-
-function polygonArea(coords){
+function polyArea(coords){
   var n=coords.length; if(n<3) return 0;
   var area=0,R=6371000;
   for(var i=0;i<n;i++){
@@ -1272,13 +1072,11 @@ function polygonArea(coords){
   }
   return Math.abs(area/2);
 }
-
-function polygonCentroid(coords){
+function polyCentroid(coords){
   var lat=0,lng=0;
-  coords.forEach(function(c){ lat+=c[0]; lng+=c[1]; });
+  coords.forEach(function(c){lat+=c[0];lng+=c[1];});
   return {lat:lat/coords.length,lng:lng/coords.length};
 }
-
 function fmtArea(m2){
   if(m2>=1000000) return (m2/1000000).toFixed(2)+'km²';
   if(m2>=10000) return (m2/10000).toFixed(1)+'ha';
@@ -1286,14 +1084,13 @@ function fmtArea(m2){
 }
 
 // ══════════════════════════════════════════════════════════════
-//  UI
+//  UI HELPERS
 // ══════════════════════════════════════════════════════════════
 function updateHeader(){
   document.getElementById('hav').style.background=me.color;
   document.getElementById('hav').textContent=me.display[0].toUpperCase();
   document.getElementById('hname').textContent=me.display;
 }
-
 function refreshStats(){
   var steps=today_db.steps+session.steps;
   var dist=today_db.dist+session.dist;
@@ -1303,7 +1100,6 @@ function refreshStats(){
   document.getElementById('sCal').textContent=Math.round(cal);
   document.getElementById('sLoops').textContent=loopCount;
 }
-
 function setBadge(state,text){
   var b=document.getElementById('gpsbadge'),t=document.getElementById('gpstext');
   b.className='gpsbadge'+(state==='live'?' live':state==='weak'?' weak':'');
@@ -1321,7 +1117,6 @@ function showGPSError(msg){
   document.getElementById('map').appendChild(el);
   setTimeout(function(){ if(el.parentNode) el.remove(); },8000);
 }
-
 var toastT;
 function toast(msg){ var t=document.getElementById('toast'); t.textContent=msg; t.className='on'; clearTimeout(toastT); toastT=setTimeout(function(){ t.className=''; },3000); }
 function showConquest(msg){ var el=document.createElement('div'); el.className='cpop'; el.style.color=me.color; el.textContent=msg; document.body.appendChild(el); setTimeout(function(){ el.remove(); },1500); }
@@ -1332,15 +1127,13 @@ function showConquest(msg){ var el=document.createElement('div'); el.className='
 document.getElementById('btnCenter').onclick=function(){
   if(!navigator.geolocation){ toast('Geolocation not supported'); return; }
   navigator.geolocation.getCurrentPosition(
-    function(p){ map&&map.setView([p.coords.latitude,p.coords.longitude],17); },
+    function(p){ mapObj&&mapObj.setView([p.coords.latitude,p.coords.longitude],17); },
     function(e){ toast(({1:'Location denied',2:'No GPS signal',3:'GPS timed out'})[e.code]||'GPS error'); },
     {enableHighAccuracy:true,timeout:10000,maximumAge:5000}
   );
 };
-
 document.getElementById('btnClearTrail').onclick=function(){
-  clearTrailVisuals();
-  trailPts=[]; trailDist=0; loopHintShown=false;
+  clearTrailVisuals(); trailPts=[]; trailDist=0; loopHintShown=false;
   toast('Trail cleared');
 };
 
@@ -1350,22 +1143,18 @@ document.getElementById('hplayer').onclick=function(e){
   var dd=document.getElementById('pdd');
   if(dd.classList.contains('open')){ dd.classList.remove('open'); return; }
   dd.innerHTML='';
-
-  // Profile row
   var prof=document.createElement('div'); prof.className='ddi';
   prof.innerHTML='<div style="width:30px;height:30px;border-radius:50%;background:'+me.color+';display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#000">'+me.display[0].toUpperCase()+'</div>'
-    +'<div><div style="font-weight:600;font-size:13px">'+me.display+'</div><div style="font-size:10px;color:#4a5568;font-family:\'JetBrains Mono\',monospace">@'+me.username+'</div></div>';
+    +'<div><div style="font-weight:600;font-size:13px">'+me.display+'</div>'
+    +'<div style="font-size:10px;color:#4a5568;font-family:\'JetBrains Mono\',monospace">@'+me.username+'</div></div>';
   dd.appendChild(prof);
   var sep=document.createElement('div'); sep.className='ddsep'; dd.appendChild(sep);
-
-  // Stats summary
   var stats=document.createElement('div'); stats.className='ddi';
-  stats.style.flexDirection='column'; stats.style.alignItems='flex-start'; stats.style.gap='2px';
-  stats.innerHTML='<span style="font-size:10px;color:#4a5568;font-family:\'JetBrains Mono\',monospace;letter-spacing:1px">TOTAL STATS</span>'
-    +'<span style="font-size:12px;color:#94a3b8">'+((me.total_loops)||0)+' loops · '+fmtArea(me.total_area||0)+' claimed</span>';
+  stats.style.cssText='flex-direction:column;align-items:flex-start;gap:2px';
+  stats.innerHTML='<span style="font-size:10px;color:#4a5568;font-family:\'JetBrains Mono\',monospace;letter-spacing:1px">TOTAL AREA</span>'
+    +'<span style="font-size:12px;color:#94a3b8">'+fmtArea(me.total_area||0)+' claimed</span>';
   dd.appendChild(stats);
   var sep2=document.createElement('div'); sep2.className='ddsep'; dd.appendChild(sep2);
-
   var signout=document.createElement('div'); signout.className='dda';
   signout.innerHTML='🚪 Sign Out';
   signout.onclick=function(){
