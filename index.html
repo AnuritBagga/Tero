@@ -3,140 +3,128 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>TerriTory DB Test</title>
+<title>TerriTory DB Test v2</title>
 <style>
 body{font-family:monospace;background:#060810;color:#e2e8f5;padding:20px;font-size:13px}
-h2{color:#38bdf8;margin-bottom:16px}
-.test{margin-bottom:12px;padding:12px;border-radius:8px;border:1px solid #333}
+h2{color:#38bdf8;margin-bottom:4px}
+.sub{color:#374151;font-size:11px;margin-bottom:16px}
+.test{margin-bottom:10px;padding:12px;border-radius:8px;border:1px solid #333}
 .pass{border-color:#4ade80;background:rgba(74,222,128,0.08)}
 .fail{border-color:#f87171;background:rgba(248,113,113,0.08)}
-.pending{border-color:#374151;background:rgba(255,255,255,0.02)}
-.label{font-weight:700;margin-bottom:4px}
-.detail{color:#94a3b8;font-size:11px;word-break:break-all;margin-top:6px;white-space:pre-wrap}
-button{background:linear-gradient(135deg,#38bdf8,#818cf8);color:#000;border:none;padding:12px 24px;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;margin-bottom:20px}
+.run{border-color:#374151;background:rgba(255,255,255,0.02)}
+.label{font-weight:700;margin-bottom:5px;font-size:13px}
+.detail{color:#94a3b8;font-size:11px;word-break:break-all;white-space:pre-wrap;margin-top:4px}
+button{background:linear-gradient(135deg,#38bdf8,#818cf8);color:#000;border:none;padding:12px 28px;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;margin-bottom:20px}
 </style>
 </head>
 <body>
-<h2>TerriTory — Live DB Diagnostic</h2>
+<h2>TerriTory — DB Test v2</h2>
+<div class="sub">Tests against your live Supabase database</div>
 <button onclick="runAll()">RUN ALL TESTS</button>
-<div id="tests"></div>
-
+<div id="out"></div>
 <script>
-var SB_URL = 'https://zvcpyvhnaahxsnoqycfr.supabase.co';
-var SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp2Y3B5dmhuYWFoeHNub3F5Y2ZyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE1OTE0NjMsImV4cCI6MjA4NzE2NzQ2M30.wHMNZfjyYTzWZg0JjQ0fFjNmx7pt-YdG5Kxy2fWk5D0';
-var H = {'Content-Type':'application/json','apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY};
+var URL = 'https://zvcpyvhnaahxsnoqycfr.supabase.co';
+var KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp2Y3B5dmhuYWFoeHNub3F5Y2ZyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE1OTE0NjMsImV4cCI6MjA4NzE2NzQ2M30.wHMNZfjyYTzWZg0JjQ0fFjNmx7pt-YdG5Kxy2fWk5D0';
+var H = {'Content-Type':'application/json','apikey':KEY,'Authorization':'Bearer '+KEY};
 
-var tests = [];
-var insertedId = null;
+var out, results=[], testId=null;
 
-function addTest(name) {
-  var div = document.createElement('div');
-  div.className = 'test pending';
-  div.innerHTML = '<div class="label">&#9679; ' + name + '</div><div class="detail" id="t'+tests.length+'">Running...</div>';
-  document.getElementById('tests').appendChild(div);
-  var idx = tests.length;
-  tests.push({div:div, idx:idx});
-  return idx;
+function addRow(label){
+  var d=document.createElement('div'); d.className='test run';
+  var id='t'+results.length;
+  d.innerHTML='<div class="label">... '+label+'</div><div class="detail" id="'+id+'">waiting...</div>';
+  out.appendChild(d);
+  results.push({el:d,id:id,label:label});
+  return results.length-1;
 }
+function pass(i,msg){ results[i].el.className='test pass'; results[i].el.querySelector('.label').textContent='PASS: '+results[i].label; document.getElementById(results[i].id).textContent=msg; }
+function fail(i,msg){ results[i].el.className='test fail'; results[i].el.querySelector('.label').textContent='FAIL: '+results[i].label; document.getElementById(results[i].id).textContent=msg; }
 
-function pass(idx, msg) {
-  tests[idx].div.className = 'test pass';
-  tests[idx].div.querySelector('.label').textContent = 'PASS: ' + tests[idx].div.querySelector('.label').textContent.slice(2);
-  document.getElementById('t'+idx).textContent = msg;
-}
+async function runAll(){
+  out=document.getElementById('out'); out.innerHTML=''; results=[]; testId=null;
 
-function fail(idx, msg) {
-  tests[idx].div.className = 'test fail';
-  tests[idx].div.querySelector('.label').textContent = 'FAIL: ' + tests[idx].div.querySelector('.label').textContent.slice(2);
-  document.getElementById('t'+idx).textContent = msg;
-}
+  // TEST 1 — reach Supabase
+  var t1=addRow('Supabase connection');
+  try{
+    var r=await fetch(URL+'/rest/v1/users?select=id&limit=1',{headers:H});
+    var b=await r.text();
+    if(r.ok) pass(t1,'OK — status '+r.status);
+    else fail(t1,'HTTP '+r.status+' — '+b);
+  }catch(e){fail(t1,'Network error: '+e.message);return;}
 
-async function runAll() {
-  document.getElementById('tests').innerHTML = '';
-  tests = [];
-  insertedId = null;
+  // TEST 2 — users table readable
+  var t2=addRow('users table — list all');
+  try{
+    var r=await fetch(URL+'/rest/v1/users?select=id,username,display',{headers:H});
+    var b=await r.text();
+    if(r.ok){ var rows=JSON.parse(b); pass(t2,'Found '+rows.length+' users:\n'+b); }
+    else fail(t2,'HTTP '+r.status+' — '+b);
+  }catch(e){fail(t2,''+e);}
 
-  // TEST 1: Can reach Supabase at all
-  var t1 = addTest('Can reach Supabase URL');
-  try {
-    var r = await fetch(SB_URL + '/rest/v1/users?select=id&limit=1', {headers:H});
-    var body = await r.text();
-    if (r.ok) pass(t1, 'HTTP ' + r.status + ' — users table readable. Body: ' + body.slice(0,80));
-    else fail(t1, 'HTTP ' + r.status + ' — ' + body);
-  } catch(e) { fail(t1, 'Network error: ' + e.message); return; }
+  // TEST 3 — territories table readable
+  var t3=addRow('territories table — exists and readable');
+  try{
+    var r=await fetch(URL+'/rest/v1/territories?select=id,owner_display,area_m2&limit=10',{headers:H});
+    var b=await r.text();
+    if(r.ok){ var rows=JSON.parse(b); pass(t3,'Table exists! Found '+rows.length+' rows:\n'+b); }
+    else fail(t3,'HTTP '+r.status+'\n'+b+'\n\nThe territories table does not exist. Run the reset SQL again.');
+  }catch(e){fail(t3,''+e);}
 
-  // TEST 2: territories table exists
-  var t2 = addTest('territories table exists');
-  try {
-    var r = await fetch(SB_URL + '/rest/v1/territories?select=id&limit=1', {headers:H});
-    var body = await r.text();
-    if (r.ok) pass(t2, 'HTTP ' + r.status + ' — territories readable. Rows: ' + body);
-    else fail(t2, 'HTTP ' + r.status + ' — ' + body + '\n\nFIX: Run supabase_fix.sql in your Supabase SQL Editor!');
-  } catch(e) { fail(t2, 'Error: ' + e.message); }
-
-  // TEST 3: Can INSERT into territories
-  var t3 = addTest('Can INSERT into territories');
-  try {
-    var testCoords = [[28.6,77.2],[28.601,77.2],[28.601,77.201],[28.6,77.2]];
-    var payload = {
-      owner_id: 1,
-      owner_username: 'test_user',
-      owner_display: 'Test User',
-      owner_color: '#38bdf8',
-      geojson: JSON.stringify(testCoords),
-      area_m2: 999,
-      created_at: new Date().toISOString()
+  // TEST 4 — insert into territories with fake UUID owner_id
+  var t4=addRow('INSERT into territories');
+  try{
+    var fakeId='00000000-0000-0000-0000-000000000001';
+    var coords=[[28.6,77.2],[28.601,77.2],[28.601,77.201],[28.6,77.2]];
+    var payload={
+      owner_id:fakeId,
+      owner_username:'dbtest',
+      owner_display:'DB Test',
+      owner_color:'#38bdf8',
+      geojson:JSON.stringify(coords),
+      area_m2:1234,
+      created_at:new Date().toISOString()
     };
-    var r = await fetch(SB_URL + '/rest/v1/territories', {
-      method: 'POST',
-      headers: Object.assign({}, H, {'Prefer':'return=representation'}),
-      body: JSON.stringify(payload)
+    var r=await fetch(URL+'/rest/v1/territories',{
+      method:'POST',
+      headers:Object.assign({},H,{'Prefer':'return=representation'}),
+      body:JSON.stringify(payload)
     });
-    var body = await r.text();
-    if (r.ok) {
-      var inserted = JSON.parse(body);
-      insertedId = inserted[0] && inserted[0].id;
-      pass(t3, 'Inserted OK! id=' + insertedId + '\nFull response: ' + body.slice(0,200));
+    var b=await r.text();
+    if(r.ok){
+      var inserted=JSON.parse(b);
+      testId=inserted[0]&&inserted[0].id;
+      pass(t4,'INSERT worked! New row id='+testId+'\n'+b);
     } else {
-      fail(t3, 'HTTP ' + r.status + '\nError: ' + body + '\n\nPossible causes:\n- owner_id=1 doesnt exist in users table (need real user id)\n- RLS policy blocking insert\n- territories table doesnt exist');
+      fail(t4,'HTTP '+r.status+'\n'+b);
     }
-  } catch(e) { fail(t3, 'Error: ' + e.message); }
+  }catch(e){fail(t4,''+e);}
 
-  // TEST 4: Can READ back what we inserted
-  var t4 = addTest('Can READ territories back');
-  try {
-    var r = await fetch(SB_URL + '/rest/v1/territories?select=*&order=created_at.desc&limit=5', {headers:H});
-    var body = await r.text();
-    if (r.ok) {
-      var rows = JSON.parse(body);
-      pass(t4, 'Found ' + rows.length + ' rows in territories table.\n' + body.slice(0,300));
-    } else {
-      fail(t4, 'HTTP ' + r.status + ' — ' + body);
-    }
-  } catch(e) { fail(t4, 'Error: ' + e.message); }
+  // TEST 5 — read back
+  var t5=addRow('READ territories back');
+  try{
+    var r=await fetch(URL+'/rest/v1/territories?select=*&order=created_at.desc&limit=5',{headers:H});
+    var b=await r.text();
+    if(r.ok){ var rows=JSON.parse(b); pass(t5,'Read OK — '+rows.length+' rows:\n'+b.slice(0,400)); }
+    else fail(t5,'HTTP '+r.status+' — '+b);
+  }catch(e){fail(t5,''+e);}
 
-  // TEST 5: Check actual users in DB (to see real owner_id)
-  var t5 = addTest('List users (to get real IDs)');
-  try {
-    var r = await fetch(SB_URL + '/rest/v1/users?select=id,username,display&limit=10', {headers:H});
-    var body = await r.text();
-    if (r.ok) {
-      pass(t5, 'Users in DB: ' + body);
-    } else {
-      fail(t5, 'HTTP ' + r.status + ' — ' + body);
-    }
-  } catch(e) { fail(t5, 'Error: ' + e.message); }
+  // TEST 6 — daily_stats table
+  var t6=addRow('daily_stats table — exists');
+  try{
+    var r=await fetch(URL+'/rest/v1/daily_stats?select=id&limit=1',{headers:H});
+    var b=await r.text();
+    if(r.ok) pass(t6,'OK — '+b);
+    else fail(t6,'HTTP '+r.status+' — '+b);
+  }catch(e){fail(t6,''+e);}
 
-  // TEST 6: Clean up test row
-  if (insertedId) {
-    var t6 = addTest('Cleanup test row (DELETE id=' + insertedId + ')');
-    try {
-      var r = await fetch(SB_URL + '/rest/v1/territories?id=eq.' + insertedId, {
-        method: 'DELETE', headers: H
-      });
-      if (r.ok || r.status === 204) pass(t6, 'Deleted test row OK');
-      else fail(t6, 'HTTP ' + r.status + ' — ' + await r.text());
-    } catch(e) { fail(t6, 'Error: ' + e.message); }
+  // TEST 7 — cleanup
+  if(testId){
+    var t7=addRow('DELETE test row (cleanup)');
+    try{
+      var r=await fetch(URL+'/rest/v1/territories?id=eq.'+testId,{method:'DELETE',headers:H});
+      if(r.ok||r.status===204) pass(t7,'Deleted test row id='+testId);
+      else fail(t7,'HTTP '+r.status+' — '+await r.text());
+    }catch(e){fail(t7,''+e);}
   }
 }
 </script>
